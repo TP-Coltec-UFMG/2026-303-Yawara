@@ -58,5 +58,4 @@ corrompidas e resolvendo enigmas em antigas ruínas para chegar até Yawara.
 <img src="imgs/Logo_TryNotToDie.png" alt="Logo">
 
 ## Links Importantes
-<a href="https://drive.google.com/drive/folders/1llBx95pg4eu_-IFZTqqcROQjQ9nTG5tp?usp=sharing">Versões Anteriores</a>
-<a href="https://canva.link/0e6h8cx1otgqhsm">Apresentação do Menu Canvas</a>
+
