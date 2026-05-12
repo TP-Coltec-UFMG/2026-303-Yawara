@@ -54,8 +54,6 @@ corrompidas e resolvendo enigmas em antigas ruínas para chegar até Yawara.
 ## Menu de Configurações
 <img src="imgs/Menu_Config.png" alt="MenuConf"></img>
 
-## Logo
-<img src="imgs/Logo_TryNotToDie.png" alt="Logo">
 
 ## Links Importantes
 
