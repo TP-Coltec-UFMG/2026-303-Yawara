@@ -1,4 +1,6 @@
-# Yawara
+<p align="center">
+  <img src="Titulo.png" alt="Yawara" width="700">
+</p>
 
 ## Grupo
 - Nícolas Fantauzzi
