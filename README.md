@@ -19,7 +19,6 @@ O projeto é inspirado no folclore brasileiro, na biodiversidade nacional e em e
 
 O jogo se passa em um Brasil afetado por uma força misteriosa que corrompe a fauna, a flora e os espíritos naturais do país. Ao longo da jornada, o jogador deverá explorar diferentes regiões brasileiras, enfrentar criaturas corrompidas e descobrir os segredos por trás do despertar de Yawara.
 
----
 
 # História
 
@@ -37,7 +36,6 @@ Ao despertar, Yawara foi consumido por uma força sombria conhecida como **A Som
 
 Agora, o destino da natureza depende de um novo guardião.
 
----
 
 # Personagem Principal
 
@@ -47,7 +45,6 @@ Quando criança, Aruan encontrou um antigo amuleto indígena perdido nas profund
 
 Com esses poderes, Aruan deverá atravessar diferentes regiões do país, solucionar enigmas em ruínas ancestrais e enfrentar criaturas corrompidas até encontrar Yawara e restaurar o equilíbrio da natureza.
 
----
 
 # Objetivos do Jogo
 
@@ -57,7 +54,6 @@ Com esses poderes, Aruan deverá atravessar diferentes regiões do país, soluci
 - Utilizar cartas espirituais em combate  
 - Restaurar o equilíbrio da natureza  
 
----
 
 # Tecnologias Utilizadas
 
@@ -65,7 +61,6 @@ Com esses poderes, Aruan deverá atravessar diferentes regiões do país, soluci
 - GDScript  
 - Pixel Art  
 
----
 
 # Pré-requisitos
 
@@ -73,11 +68,10 @@ Para executar o projeto é necessário possuir:
 
 - Godot Engine 4.5 Stable instalada  
 
----
 
 # Acessibilidade
 
-O projeto também conta com uma análise de acessibilidade disponível na planilha abaixo:
+O projeto até o momento conta com os itens de acessibilidade disponíveis na planilha abaixo:
 
 [Planilha de Acessibilidade](https://1drv.ms/x/c/af28c7372be2bc7b/IQCME2kCQXE9QaOznKgSMcIiAbiKFgsoctzGw00bB5ojo2Q?e=nh1yQM)
 
