@@ -85,6 +85,9 @@ O projeto até o momento conta com os itens de acessibilidade disponíveis na pl
 ## Menu de Configurações
 ![Menu Configurações](menu_conf.png)
 
+## Personagem Principal - Aruan
+![aruan](aruan.png)
+
 ---
 
 # Links Importantes
