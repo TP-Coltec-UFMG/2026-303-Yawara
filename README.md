@@ -91,4 +91,5 @@ O projeto até o momento conta com os itens de acessibilidade disponíveis na pl
 
 - Repositório do projeto  
 - Documentação da Godot Engine  
-- Planilha de acessibilidade  
+- Planilha de acessibilidade  [Planilha de Acessibilidade](https://1drv.ms/x/c/af28c7372be2bc7b/IQCME2kCQXE9QaOznKgSMcIiAbiKFgsoctzGw00bB5ojo2Q?e=nh1yQM)
+
