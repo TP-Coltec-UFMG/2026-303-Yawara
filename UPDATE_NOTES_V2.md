@@ -1,0 +1,17 @@
+Atualizações desta versão:
+- Correção do conflito WeaponDB.get_name -> get_weapon_name.
+- Player menor no início e armas/silhuetas menores.
+- Comida não é atraída, mas é consumida automaticamente ao passar por cima: quatro mordidas com cooldown, Progress a cada uma e bônus dobrado na última.
+- Árvores e pedras são permanentes e não recebem mais dano dos ataques.
+- As cinco imagens enviadas foram ligadas como artes provisórias animadas dos Guardiões, usando os quadros de caminhada e inversão horizontal.
+- Criaturas derrotadas deixam carne em vez de orbes de XP; isso também vale para mortes causadas pelo ecossistema.
+- Alimentos especiais (valor 2/3) podem surgir naturalmente e em árvores.
+- Biomas um pouco maiores.
+- Predadores caçam presas com mais consistência e podem andar em pequenos grupos por espécie.
+- Presas e passivos forrageiam, carnívoros aproveitam carne, ladrões roubam comida, emboscadores reagem ao movimento, Alphas rendem carne melhor e espécies evitam aglomeração.
+- Mobs têm mais vida, barra de HP visível e ataque com telegraph antes do golpe.
+- Menu de evolução agora é modal, com aparição gradual das opções e painel de detalhes.
+- HUD com textos maiores.
+- Tela C/Tab refeita em três colunas, com retrato, Evolutions adquiridas, radar de cinco afinidades, atributos secundários e barra de Mutagen.
+- Mini-chefes entregam Fruto Ancestral para escolher ramos corporais; rerolls e melhorias de raridade agora têm custo progressivo.
+- spawn_xp_orb e spawn_fruit agora usam call_deferred para evitar erro de flushing queries.

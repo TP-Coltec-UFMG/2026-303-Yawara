@@ -1,0 +1,69 @@
+ECOS DO BRASIL: YAWARA — MANIFESTO V3
+
+Entrada do projeto:
+- project.godot
+
+Documentacao:
+- README.md
+- SYSTEMS_V3.md
+- SPRITES_TODO.md
+- TEST_CHECKLIST.md
+- GAMEPLAY_SYSTEMS.md
+- FOLCLORE_DESIGN.md
+- MAPA_E_BUILD.md
+- SETTINGS_AND_LANGUAGES.md
+- UPDATE_NOTES_V2.md
+- GUIA_INSTALACAO_ASSETS.md
+- VALIDATION_REPORT.txt
+
+Dados e sessao:
+- scripts/core/game_session.gd
+- scripts/core/stat_database.gd
+- scripts/core/genetics_database.gd
+- scripts/core/combat_database.gd
+- scripts/core/biome_database.gd
+- scripts/core/upgrade_database.gd
+- scripts/core/weapon_database.gd
+
+Gameplay:
+- scripts/player/player.gd
+- scripts/player/evolution_visuals.gd
+- scripts/enemies/enemy.gd
+- scripts/enemies/miniboss.gd
+- scripts/boss/yawara.gd
+- scripts/world/game_world.gd
+- scripts/world/procedural_world.gd
+- scripts/world/procedural_chunk.gd
+- scripts/world/encounter_point.gd
+- scripts/world/fruit_pickup.gd
+- scripts/world/world_prop.gd
+- scripts/effects/projectile.gd
+- scripts/effects/melee_effect.gd
+- scripts/effects/xp_orb.gd
+- scripts/effects/hazard_zone.gd
+
+Interface e suporte:
+- scripts/ui/*.gd
+- scripts/components/health_component.gd
+- scripts/core/settings_manager.gd
+- scripts/core/audio_manager.gd
+
+Cenas:
+- scenes/world/*.tscn
+- scenes/player/*.tscn
+- scenes/enemies/*.tscn
+- scenes/boss/*.tscn
+- scenes/effects/*.tscn
+- scenes/ui/*.tscn
+
+Assets opcionais:
+- assets/sprites/**
+- assets/audio/**
+- assets/shaders/guardian_chroma_key.gdshader
+
+Artes provisórias já integradas:
+- assets/sprites/miniboss/source_guardians/*.jpeg
+
+A lista detalhada dos arquivos visuais e sonoros a produzir esta em
+SPRITES_TODO.md. Arquivos .godot sao cache local do editor e nao fazem parte
+do pacote de distribuicao.

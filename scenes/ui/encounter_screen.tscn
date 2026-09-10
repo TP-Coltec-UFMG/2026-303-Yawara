@@ -1,0 +1,77 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource path="res://scripts/ui/encounter_screen.gd" type="Script" id="1"]
+[sub_resource type="StyleBoxFlat" id="PanelStyle"]
+bg_color = Color(0.12, 0.08, 0.05, 0.97)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.82, 0.64, 0.31, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="EncounterScreen" type="CanvasLayer"]
+layer = 24
+script = ExtResource("1")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.01, 0.01, 0.72)
+
+[node name="Center" type="CenterContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Root/Center"]
+custom_minimum_size = Vector2(660, 440)
+layout_mode = 2
+theme_override_styles/panel = SubResource("PanelStyle")
+
+[node name="Box" type="VBoxContainer" parent="Root/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Root/Center/Panel/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.52, 1)
+theme_override_font_sizes/font_size = 30
+text = "Ponto de Encontro"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="Root/Center/Panel/Box"]
+layout_mode = 2
+custom_minimum_size = Vector2(600, 90)
+theme_override_font_sizes/font_size = 17
+text = "Algo acontece aqui."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Options" type="VBoxContainer" parent="Root/Center/Panel/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Close" type="Button" parent="Root/Center/Panel/Box"]
+layout_mode = 2
+text = "Sair"

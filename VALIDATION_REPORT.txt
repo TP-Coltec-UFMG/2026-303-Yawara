@@ -1,0 +1,48 @@
+ECOS DO BRASIL: YAWARA — VALIDACAO V3
+Data: 2026-09-03
+
+RESULTADO: APROVADO NA VALIDACAO ESTATICA
+
+Contrato de conteudo:
+- Stats internos: 51
+- Biomas: 4
+- Familias regulares: 12
+- Chefes: 6 (5 guardioes de bioma + Yawara)
+- Adds de chefe: 2
+- POIs: 14
+- Genetics: 23, com Splicing
+- Ataques corporais: 16
+- Ultimates: 8
+- Movimentos/dashes: 9
+- Registros de melhorias/equipamentos: 130
+- Sistema de transformacao em caranguejo: excluido conforme solicitado
+
+Cronograma confirmado:
+- 03:00: guardiao ligado ao bioma atual
+- 06:00: guardiao ligado ao bioma atual
+- 08:00: Yawara
+
+Verificacoes executadas:
+- delimitadores e strings estruturais dos arquivos GDScript/TSCN
+- funcoes duplicadas e indentacao dos scripts
+- IDs duplicados nos catalogos
+- caminhos @onready em todas as cenas
+- referencias res:// obrigatorias
+- presenca dos tres gatilhos de tempo
+- nenhum drop de XP em scripts de criaturas, mini-chefes ou Yawara
+- comida sem magnetismo e com consumo automático somente dentro da área curta
+- quatro mordidas com cooldown de Feeding Speed e Progress tipado explicitamente
+- somente o alimento elegível mais próximo é consumido por vez
+- troca de sprite `_bite_1..3` ou redução visual de fallback a cada mordida
+- árvores e pedras sem grupo harvestable, dano, quebra ou recompensa por golpe
+- cinco folhas de sprites enviadas ligadas aos cinco Guardiões por recorte, animação de caminhada, inversão horizontal e chroma key
+- PNG transparente definitivo de Guardião com prioridade automática sobre o JPEG
+- quatro pisos opcionais de bioma carregados e repetidos no mapa procedural
+- tela C/Tab com tres colunas, cinco afinidades e barra de Mutagen
+- doze familias com forrageamento, fuga, caca, separacao e mecanicas proprias
+
+Observacao: os cinco Guardiões já possuem arte provisória. Os outros sprites e
+áudios continuam opcionais por design; placeholders procedurais mantêm o projeto
+utilizável enquanto os assets finais são criados. O ambiente não possui o
+executável do Godot, então a aprovação é estática e deve ser seguida pelo roteiro
+de teste manual de TEST_CHECKLIST.md ao abrir no Godot 4.7.
