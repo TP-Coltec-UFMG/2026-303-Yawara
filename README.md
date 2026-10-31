@@ -1,4 +1,4 @@
-# Ecos do Brasil: Yawara — Pixel Art + Áudio (Godot 4.5+)
+# Ecos do Brasil: Yawara 
 
 Protótipo completo de roguelite top-down inspirado na estrutura de evolução corporal/ecossistema de Everything is Crab, com identidade brasileira própria.
 
