@@ -1,0 +1,13 @@
+﻿# Godot - arquivos locais e temporários
+.godot/
+
+# Arquivos temporários
+*.tmp
+*.bak
+*.swp
+*~
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini

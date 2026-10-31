@@ -38,12 +38,81 @@ var final_boss_triggered := false
 var pending_miniboss_events := 0
 var endless_next_event := GameSession.FINAL_BOSS_SECONDS + GameSession.ENDLESS_BOSS_INTERVAL
 
+const GUARDIAN_SCENES := {
+    "mapinguari": "res://scenes/enemies/guardians/mapinguari.tscn",
+    "minhocao": "res://scenes/enemies/guardians/minhocao.tscn",
+    "teiniagua": "res://scenes/enemies/guardians/teiniagua.tscn",
+    "cabra_cabriola": "res://scenes/enemies/guardians/cabra_cabriola.tscn",
+    "corpo_seco": "res://scenes/enemies/guardians/corpo_seco.tscn",
+}
+
+const CREATURE_SCENES := {
+    "marimbondo_onca": "res://scenes/enemies/mobs/marimbondo_onca.tscn",
+    "minhocao_areia": "res://scenes/enemies/mobs/minhocao_areia.tscn",
+    "capivara_couracada": "res://scenes/enemies/mobs/capivara_couracada.tscn",
+    "onca_sombra": "res://scenes/enemies/mobs/onca_sombra.tscn",
+    "furao_ladrao": "res://scenes/enemies/mobs/furao_ladrao.tscn",
+    "sapo_aranha": "res://scenes/enemies/mobs/sapo_aranha.tscn",
+    "fruta_espinho": "res://scenes/enemies/mobs/fruta_espinho.tscn",
+    "peixe_cuspidor": "res://scenes/enemies/mobs/peixe_cuspidor.tscn",
+    "jabuti_ancestral": "res://scenes/enemies/mobs/jabuti_ancestral.tscn",
+    "peixe_boi_jovem": "res://scenes/enemies/mobs/peixe_boi_jovem.tscn",
+    "coruja_oco": "res://scenes/enemies/mobs/coruja_oco.tscn",
+    "lebre_pampas": "res://scenes/enemies/mobs/lebre_pampas.tscn",
+    "capivara_amazonica": "res://scenes/enemies/mobs/capivara_amazonica.tscn",
+    "ema": "res://scenes/enemies/mobs/ema.tscn",
+    "mico_leao": "res://scenes/enemies/mobs/mico_leao.tscn",
+    "quero_quero": "res://scenes/enemies/mobs/quero_quero.tscn",
+    "arara": "res://scenes/enemies/mobs/arara.tscn",
+    "tatu_peba": "res://scenes/enemies/mobs/tatu_peba.tscn",
+    "capivara_pantanal": "res://scenes/enemies/mobs/capivara_pantanal.tscn",
+    "paca": "res://scenes/enemies/mobs/paca.tscn",
+    "graxaim": "res://scenes/enemies/mobs/graxaim.tscn",
+    "queixada": "res://scenes/enemies/mobs/queixada.tscn",
+    "carcara": "res://scenes/enemies/mobs/carcara.tscn",
+    "tamandua_bandeira": "res://scenes/enemies/mobs/tamandua_bandeira.tscn",
+    "quati": "res://scenes/enemies/mobs/quati.tscn",
+    "veado_campeiro": "res://scenes/enemies/mobs/veado_campeiro.tscn",
+    "onca_corrompida": "res://scenes/enemies/mobs/onca_corrompida.tscn",
+    "gato_mato": "res://scenes/enemies/mobs/gato_mato.tscn",
+    "lobo_guara": "res://scenes/enemies/mobs/lobo_guara.tscn",
+    "jaguatirica_corrompida": "res://scenes/enemies/mobs/jaguatirica_corrompida.tscn",
+    "bugio": "res://scenes/enemies/mobs/bugio.tscn",
+    "curumim_corrompido": "res://scenes/enemies/mobs/curumim_corrompido.tscn",
+    "raiz_yawara": "res://scenes/enemies/mobs/raiz_yawara.tscn",
+}
+
+
+# Tenta carregar o recurso específico apenas quando a criatura aparece.
+# Assim, um sprite externo incorreto não impede o carregamento do mundo todo.
+func _safe_load_scene(scene_path: String, backup: PackedScene) -> PackedScene:
+    if not ResourceLoader.exists(scene_path):
+        push_warning("Cena não encontrada: " + scene_path)
+        return backup
+    var candidate := load(scene_path) as PackedScene
+    return candidate if candidate != null else backup
+
+func _creature_scene(id: String) -> PackedScene:
+    var path := String(CREATURE_SCENES.get(id, ""))
+    if path.is_empty():
+        return ENEMY_SCENE
+    return _safe_load_scene(path, ENEMY_SCENE)
+
+func _guardian_scene(id: String) -> PackedScene:
+    var path := String(GUARDIAN_SCENES.get(id, ""))
+    if path.is_empty():
+        return MINIBOSS_SCENE
+    return _safe_load_scene(path, MINIBOSS_SCENE)
+
 const DAY_CYCLE_SECONDS := 120.0
 
 func _ready() -> void:
     add_to_group("game_world")
     randomize()
     GameSession.reset_run()
+    # Recriar os chunks iniciais com a semente da partida evita que o minimapa
+    # e os novos chunks usem gerações diferentes dentro de uma mesma jornada.
+    procedural_world.reset_seed(GameSession.run_seed)
     _spawn_player()
     current_region = procedural_world.get_biome_at(player.global_position)
     _set_region(current_region, true)
@@ -72,9 +141,11 @@ func _process(delta: float) -> void:
     _debug_shortcuts()
 
 func _spawn_player() -> void:
-    player = PLAYER_SCENE.instantiate() as Player
-    player.global_position = Vector2(480.0, 480.0)
-    entities.add_child(player)
+    player = entities.get_node_or_null("Player") as Player
+    if player == null:
+        player = PLAYER_SCENE.instantiate() as Player
+        player.position = Vector2(480.0, 480.0)
+        entities.add_child(player)
     procedural_world.set_player(player)
     player.health_changed.connect(hud.set_health)
     player.xp_changed.connect(hud.set_xp)
@@ -120,7 +191,10 @@ func _update_boss(delta: float) -> void:
     boss_left = maxf(0.0, boss_left - delta)
     hud.set_elapsed_time(GameSession.elapsed)
     hud.set_boss_time(boss_left)
-    _update_player_environment()
+    environment_timer -= delta
+    if environment_timer <= 0.0:
+        environment_timer = 0.20
+        _update_player_environment()
     if boss_left <= 0.0 and not GameSession.is_endless():
         _finish(false)
     elif boss_left <= 0.0 and GameSession.is_endless():
@@ -153,23 +227,39 @@ func _is_climate_active(biome: int) -> bool:
 
 func _spawn_initial_ecosystem() -> void:
     for _i in range(14):
-        _spawn_creature(randf_range(260.0, 760.0))
+        _spawn_creature(randf_range(240.0, 540.0))
 
 func _spawn_creature(forced_max_distance: float = -1.0) -> Enemy:
     if not is_instance_valid(player):
         return null
-    var max_distance := forced_max_distance if forced_max_distance > 0.0 else randf_range(650.0, 940.0)
-    var min_distance := 220.0 if forced_max_distance > 0.0 else 520.0
+    var max_distance := forced_max_distance if forced_max_distance > 0.0 else randf_range(400.0, 690.0)
+    var min_distance := 170.0 if forced_max_distance > 0.0 else 330.0
     var spawn_position := procedural_world.random_land_position_near(player.global_position, min_distance, max_distance)
     var biome := procedural_world.get_biome_at(spawn_position)
     var local_rng := RandomNumberGenerator.new()
     local_rng.seed = int(Time.get_ticks_usec()) ^ randi()
-    var species := BiomeDB.random_creature(biome, local_rng)
-    if species.is_empty():
+    # A fauna comum usa somente os personagens com arte nova. Algumas familias
+    # antigas foram preservadas no projeto, mas ficam fora da geracao aleatoria
+    # ate receberem novos sprites, evitando misturas visuais pelo mapa.
+    # Only species with the reviewed, cohesive 2026 pixel-art animation pack.
+    const VISUAL_SPECIES = ["arara", "bugio", "capivara_amazonica", "capivara_couracada", "carcara", "coruja_oco", "curumim_corrompido", "ema", "fruta_espinho", "furao_ladrao", "gato_mato", "graxaim", "jabuti_ancestral", "jaguatirica_corrompida", "lebre_pampas", "lobo_guara", "marimbondo_onca", "mico_leao", "onca_corrompida", "paca", "quati", "queixada", "quero_quero", "sapo_aranha", "tamandua_bandeira"]
+    var weighted_species: Array[Dictionary] = []
+    for candidate in BiomeDB.get_creature_pool(biome):
+        var candidate_id := String(candidate.get("id", ""))
+        if not VISUAL_SPECIES.has(candidate_id):
+            continue
+        var temperament := String(candidate.get("temperament", "passive"))
+        var weight := 5 if temperament in ["prey", "passive"] else (3 if temperament in ["neutral", "territorial"] else 2)
+        for _weight_index in range(weight):
+            weighted_species.append(candidate)
+    if weighted_species.is_empty():
         return null
+    var species: Dictionary = weighted_species[local_rng.randi_range(0, weighted_species.size() - 1)].duplicate(true)
     if String(species.get("mechanic", "")) == "water_ranged":
         spawn_position = procedural_world.random_water_position_near(player.global_position, min_distance, max_distance, biome)
-    var creature := ENEMY_SCENE.instantiate() as Enemy
+        if not spawn_position.is_finite():
+            return null
+    var creature := _creature_scene(String(species["id"])).instantiate() as Enemy
     creature.global_position = spawn_position
     entities.add_child(creature)
     var progress := GameSession.elapsed / GameSession.PREPARATION_SECONDS
@@ -198,7 +288,8 @@ func _spawn_miniboss(biome: int) -> void:
         if procedural_world.get_biome_at(candidate) == biome:
             spawn_position = candidate
             break
-    var miniboss := MINIBOSS_SCENE.instantiate() as BiomeMiniboss
+    var guardian_scene: PackedScene = _guardian_scene(boss_id)
+    var miniboss := guardian_scene.instantiate() as BiomeMiniboss
     miniboss.global_position = spawn_position
     entities.add_child(miniboss)
     var progress := minf(1.8, GameSession.elapsed / GameSession.PREPARATION_SECONDS)
@@ -361,7 +452,7 @@ func _spawn_friendly_creature(biome: int) -> void:
     if candidates.is_empty():
         return
     candidates.shuffle()
-    var creature := ENEMY_SCENE.instantiate() as Enemy
+    var creature := _creature_scene(String(candidates[0]["id"])).instantiate() as Enemy
     creature.global_position = player.global_position + Vector2.from_angle(randf_range(0.0, TAU)) * 92.0
     entities.add_child(creature)
     creature.configure_creature(candidates[0], biome, 1.0)
@@ -533,6 +624,13 @@ func spawn_boss_projectile(pos: Vector2, direction: Vector2, speed: float, damag
     projectile.configure(direction, speed, damage, true, size, effect_id)
 
 func spawn_hazard_zone(pos: Vector2, radius: float, windup: float, damage: float, effect_id: String = "meteor", duration: float = 0.18) -> void:
+    # Segurança visual: impede que indicadores e áreas de dano se empilhem indefinidamente.
+    var active_zones := 0
+    for child in effects.get_children():
+        if child is HazardZone and not child.is_queued_for_deletion():
+            active_zones += 1
+    if active_zones >= 8:
+        return
     var hazard := HAZARD_ZONE_SCENE.instantiate() as HazardZone
     hazard.global_position = pos
     effects.add_child(hazard)
@@ -546,7 +644,7 @@ func spawn_boss_add(pos: Vector2, add_id: String = "curumim_corrompido") -> void
         "speed":data["speed"], "hp":data["hp"], "damage":data["damage"],
         "xp":3, "friend":99.0, "mechanic":"rush_combo" if add_id == "curumim_corrompido" else "tongue_stun", "evolutions":[]
     }
-    var add := ENEMY_SCENE.instantiate() as Enemy
+    var add := _creature_scene(add_id).instantiate() as Enemy
     add.global_position = pos
     entities.add_child(add)
     add.configure_creature(species, current_region, 1.25 + GameSession.elapsed / 480.0)

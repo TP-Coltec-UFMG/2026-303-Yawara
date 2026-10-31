@@ -24,6 +24,7 @@ signal close_requested
 var syncing := false
 
 func _ready() -> void:
+    YawaraSkin.apply(self)
     process_mode = Node.PROCESS_MODE_ALWAYS
     _populate_options()
     master_slider.value_changed.connect(_on_master_changed)

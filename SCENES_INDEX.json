@@ -1,0 +1,204 @@
+
+  "mobs": [
+	"marimbondo_onca",
+	"minhocao_areia",
+	"capivara_couracada",
+	"onca_sombra",
+	"furao_ladrao",
+	"sapo_aranha",
+	"fruta_espinho",
+	"peixe_cuspidor",
+	"jabuti_ancestral",
+	"peixe_boi_jovem",
+	"coruja_oco",
+	"lebre_pampas",
+	"capivara_amazonica",
+	"ema",
+	"mico_leao",
+	"quero_quero",
+	"arara",
+	"tatu_peba",
+	"capivara_pantanal",
+	"paca",
+	"graxaim",
+	"queixada",
+	"carcara",
+	"tamandua_bandeira",
+	"quati",
+	"veado_campeiro",
+	"onca_corrompida",
+	"gato_mato",
+	"lobo_guara",
+	"jaguatirica_corrompida",
+	"bugio",
+	"curumim_corrompido",
+    "raiz_yawara"
+  ],
+  "visuals": {
+	"marimbondo_onca": [
+	  "assets/animations/marimbondo_onca.tres",
+	  2.2950000000000004,
+      "idle_right"
+	],
+	"minhocao_areia": [
+	  "assets/animations/minhocao_areia.tres",
+	  3.7800000000000002,
+      "idle_right"
+	],
+	"capivara_couracada": [
+	  "assets/animations/capivara_couracada.tres",
+	  4.455,
+      "idle_side"
+	],
+	"onca_sombra": [
+	  "assets/animations/onca_sombra.tres",
+	  3.3075,
+      "idle_right"
+	],
+	"furao_ladrao": [
+	  "assets/animations/furao_ladrao.tres",
+	  2.12625,
+      "idle_side"
+	],
+	"sapo_aranha": [
+	  "assets/animations/sapo_aranha.tres",
+	  2.0925,
+      "idle_right"
+	],
+	"fruta_espinho": [
+	  "assets/animations/fruta_espinho.tres",
+	  2.3625,
+      "idle_right"
+	],
+	"peixe_cuspidor": [
+	  "assets/animations/peixe_cuspidor.tres",
+	  2.2275,
+      "idle_right"
+	],
+	"jabuti_ancestral": [
+	  "assets/animations/jabuti_ancestral.tres",
+	  2.905875,
+      "idle_side"
+	],
+	"peixe_boi_jovem": [
+	  "assets/animations/peixe_boi_jovem.tres",
+	  3.2670000000000003,
+      "idle_side"
+	],
+	"coruja_oco": [
+	  "assets/animations/coruja_oco.tres",
+	  1.9574999999999998,
+      "idle_right"
+	],
+	"lebre_pampas": [
+	  "assets/animations/lebre_pampas.tres",
+	  1.5795000000000001,
+      "idle_right"
+	],
+	"capivara_amazonica": [
+	  "assets/animations/capivara_amazonica.tres",
+	  0.42000000000000004,
+      "idle_side"
+	],
+	"ema": [
+	  "assets/animations/ema.tres",
+	  0.23418181818181819,
+      "idle_side"
+	],
+	"mico_leao": [
+	  "assets/animations/mico_leao.tres",
+	  0.32,
+      "idle_side"
+	],
+	"quero_quero": [
+	  "assets/animations/quero_quero.tres",
+	  0.56,
+      "idle_side"
+	],
+	"arara": [
+	  "assets/animations/arara.tres",
+	  0.22555555555555554,
+      "idle_side"
+	],
+	"tatu_peba": [
+	  "assets/animations/tatu_peba.tres",
+	  0.526060606060606,
+      "idle_side"
+	],
+	"capivara_pantanal": [
+	  "assets/animations/capivara_pantanal.tres",
+	  0.4588888888888889,
+      "idle_side"
+	],
+	"paca": [
+	  "assets/animations/paca.tres",
+	  0.21869822485207102,
+      "idle_side"
+	],
+	"graxaim": [
+	  "assets/animations/graxaim.tres",
+	  0.16661157024793388,
+      "idle_side"
+	],
+	"queixada": [
+	  "assets/animations/queixada.tres",
+	  0.5004255319148936,
+      "idle_side"
+	],
+	"carcara": [
+	  "assets/animations/carcara.tres",
+	  0.23829787234042554,
+      "idle_side"
+	],
+	"tamandua_bandeira": [
+	  "assets/animations/tamandua_bandeira.tres",
+	  0.5157894736842106,
+      "idle_side"
+	],
+	"quati": [
+	  "assets/animations/quati.tres",
+	  0.43949367088607594,
+      "idle_side"
+	],
+	"veado_campeiro": [
+	  "assets/animations/veado_campeiro.tres",
+	  0.09875751503006013,
+      "idle_side"
+	],
+	"onca_corrompida": [
+	  "assets/animations/onca_corrompida.tres",
+	  0.192972972972973,
+      "idle_side"
+	],
+	"gato_mato": [
+	  "assets/animations/gato_mato.tres",
+	  0.11729729729729729,
+      "idle_side"
+	],
+	"lobo_guara": [
+	  "assets/animations/lobo_guara.tres",
+	  0.48646464646464643,
+      "idle_side"
+	],
+	"jaguatirica_corrompida": [
+	  "assets/animations/jaguatirica_corrompida.tres",
+	  0.1362162162162162,
+      "idle_side"
+	],
+	"bugio": [
+	  "assets/animations/bugio.tres",
+	  0.6519402985074627,
+      "idle_side"
+	],
+	"curumim_corrompido": [
+	  "assets/animations/curumim_corrompido.tres",
+	  1.9574999999999998,
+      "idle_side"
+	],
+	"raiz_yawara": [
+	  "assets/animations/raiz_yawara.tres",
+	  2.7674999999999996,
+      "idle_side"
+	]
+  }
+}

@@ -3,7 +3,7 @@ extends Node2D
 
 const CHUNK_SCENE := preload("res://scenes/world/procedural_chunk.tscn")
 const CHUNK_SIZE := ProceduralChunk.CHUNK_SIZE
-const LOAD_RADIUS := 2
+const LOAD_RADIUS := 1
 const BIOME_SITE_SPACING := 3.0
 
 var world_seed := 0
@@ -12,7 +12,15 @@ var player: Node2D
 var refresh_timer := 0.0
 
 func _ready() -> void:
-    world_seed = int(Time.get_unix_time_from_system()) ^ int(Time.get_ticks_usec())
+    world_seed = GameSession.run_seed if GameSession.run_seed != 0 else int(Time.get_ticks_usec())
+    _ensure_chunks_around(Vector2(480.0, 480.0))
+
+func reset_seed(seed_value: int) -> void:
+    world_seed = seed_value
+    for chunk in loaded_chunks.values():
+        if is_instance_valid(chunk):
+            chunk.queue_free()
+    loaded_chunks.clear()
     _ensure_chunks_around(Vector2(480.0, 480.0))
 
 func set_player(new_player: Node2D) -> void:
@@ -88,7 +96,9 @@ func get_environment_at(world_position: Vector2) -> Dictionary:
 func random_land_position_near(origin: Vector2, min_distance: float, max_distance: float) -> Vector2:
     for _attempt in range(24):
         var p := origin + Vector2.from_angle(randf_range(0.0, TAU)) * randf_range(min_distance, max_distance)
-        _ensure_chunks_around(p)
+        var coord := world_to_chunk(p)
+        if not loaded_chunks.has(coord):
+            _load_chunk(coord)
         if not is_water_at(p):
             return p
     return origin + Vector2.RIGHT * min_distance
@@ -96,10 +106,12 @@ func random_land_position_near(origin: Vector2, min_distance: float, max_distanc
 func random_water_position_near(origin: Vector2, min_distance: float, max_distance: float, required_biome: int = -1) -> Vector2:
     for _attempt in range(48):
         var point := origin + Vector2.from_angle(randf_range(0.0, TAU)) * randf_range(min_distance, max_distance)
-        _ensure_chunks_around(point)
+        var coord := world_to_chunk(point)
+        if not loaded_chunks.has(coord):
+            _load_chunk(coord)
         if is_water_at(point) and (required_biome < 0 or get_biome_at(point) == required_biome):
             return point
-    return random_land_position_near(origin, min_distance, max_distance)
+    return Vector2.INF  # Sem lago compatível: não colocar fauna aquática em terra seca.
 
 func _ensure_chunks_around(world_position: Vector2) -> void:
     var center := world_to_chunk(world_position)

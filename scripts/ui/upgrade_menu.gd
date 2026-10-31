@@ -29,6 +29,7 @@ var reroll_uses := 0
 var rarity_upgrade_uses := 0
 
 func _ready() -> void:
+    YawaraSkin.apply($Root)
     process_mode = Node.PROCESS_MODE_ALWAYS
     for i in range(buttons.size()):
         buttons[i].pressed.connect(_choose.bind(i))

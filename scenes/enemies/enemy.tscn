@@ -1,18 +1,30 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource path="res://scripts/enemies/enemy.gd" type="Script" id="1"]
 [ext_resource path="res://scripts/components/health_component.gd" type="Script" id="2"]
 
+[ext_resource type="SpriteFrames" path="res://assets/animations/capivara_amazonica.tres" id="3"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/shadow_soft.png" id="shadow_en"]
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_enemy"]
 radius = 18.0
+
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1")
 
+[node name="ContactShadow" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(0, 21)
+scale = Vector2(0.64, 0.64)
+texture = ExtResource("shadow_en")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 3
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_enemy")
@@ -20,3 +32,10 @@ shape = SubResource("CircleShape2D_enemy")
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("2")
 max_health = 45.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 3
+scale = Vector2(0.42000000000000004, 0.42000000000000004)
+sprite_frames = ExtResource("3")
+animation = &"idle_right"
+autoplay = "idle_right"

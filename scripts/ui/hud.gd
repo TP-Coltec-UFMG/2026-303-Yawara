@@ -1,22 +1,21 @@
 class_name GameHUD
 extends CanvasLayer
 
-@onready var health_bar: ProgressBar = $Root/Top/Row/HealthBar
-@onready var xp_bar: ProgressBar = $Root/Top/Row/XPBar
-@onready var level_label: Label = $Root/Top/Row/Level
-@onready var timer_label: Label = $Root/Top/Row/Timer
-@onready var region_label: Label = $Root/Top/Row/Region
-@onready var weapon_label: Label = $Root/Weapon
-@onready var environment_label: Label = $Root/Environment
-@onready var food_bar: ProgressBar = $Root/FoodBar
-@onready var objective_label: Label = $Root/Objective
+@onready var health_bar: ProgressBar = $Root/Vitals/Margin/Stack/HealthRow/HealthBar
+@onready var xp_bar: ProgressBar = $Root/Vitals/Margin/Stack/XpRow/XPBar
+@onready var level_label: Label = $Root/Vitals/Margin/Stack/Level
+@onready var timer_label: Label = $Root/TimeCard/Timer
+@onready var region_label: Label = $Root/LocationCard/Region
+@onready var weapon_label: Label = $Root/ToolCard/Margin/Stack/Weapon
+@onready var environment_label: Label = $Root/ClimateCard/Environment
+@onready var food_bar: ProgressBar = $Root/ToolCard/Margin/Stack/FoodRow/FoodBar
+@onready var objective_label: Label = $Root/ObjectiveCard/Objective
 @onready var boss_container: VBoxContainer = $Root/Boss
 @onready var boss_bar: ProgressBar = $Root/Boss/BossBar
 @onready var boss_timer: Label = $Root/Boss/BossTimer
 @onready var banner: Label = $Root/Banner
-@onready var mutagen_label: Label = $Root/Mutagen
+@onready var mutagen_label: Label = $Root/ToolCard/Margin/Stack/Mutagen
 @onready var root_control: Control = $Root
-@onready var top_panel: PanelContainer = $Root/Top
 
 var banner_token := 0
 var last_health := 0.0
@@ -36,12 +35,15 @@ var env_cold := false
 var last_mutagen := 0
 
 func _ready() -> void:
+    YawaraSkin.apply($Root)
     SettingsManager.register_accessibility_ui($Root)
     SettingsManager.language_changed.connect(_on_language_changed)
     get_viewport().size_changed.connect(_update_layout)
     call_deferred("_update_layout")
+    _refresh_small_labels()
 
 func _on_language_changed(_locale: String) -> void:
+    _refresh_small_labels()
     set_health(last_health, last_max_health)
     set_xp(last_xp, last_xp_needed, last_level)
     if not last_weapon.is_empty(): set_weapon(last_weapon)
@@ -55,24 +57,38 @@ func _on_language_changed(_locale: String) -> void:
         set_preparation_time(last_prep_time)
     SettingsManager.apply_accessibility($Root)
 
+func _refresh_small_labels() -> void:
+    var title: Label = $Root/ToolCard/Margin/Stack/FoodRow/FoodTitle
+    title.text = {"pt_BR": "Alimento", "en": "Food", "es": "Comida"}.get(SettingsManager.language, "Alimento")
+
 func set_health(current: float, maximum: float) -> void:
     last_health = current; last_max_health = maximum
     health_bar.max_value = maximum
     health_bar.value = current
     health_bar.tooltip_text = SettingsManager.t("health") % [int(current), int(maximum)]
+    _update_vitals_caption()
 
 func set_xp(current: int, needed: int, level: int) -> void:
     last_xp = current; last_xp_needed = needed; last_level = level
     xp_bar.max_value = needed
     xp_bar.value = current
-    level_label.text = SettingsManager.t("level") % level
+    _update_vitals_caption()
+
+func _update_vitals_caption() -> void:
+    level_label.text = "%s   •   PV %d/%d" % [SettingsManager.t("level") % last_level, int(last_health), int(last_max_health)]
 
 func set_region(region_name: String, biome: String) -> void:
-    region_label.text = "%s — %s" % [region_name, biome]
+    var full_region := "%s — %s" % [region_name, biome]
+    region_label.tooltip_text = full_region
+    region_label.text = full_region if full_region.length() <= 36 else region_name
 
 func set_weapon(weapon_name: String) -> void:
     last_weapon = weapon_name
-    weapon_label.text = SettingsManager.t("weapon") % weapon_name.to_upper()
+    var display_name := weapon_name.to_upper()
+    if display_name.length() > 22:
+        display_name = display_name.substr(0, 19) + "…"
+    weapon_label.text = "%s  [Q/R]" % (SettingsManager.t("weapon") % display_name)
+    weapon_label.tooltip_text = weapon_name
 
 func set_food(current: float, maximum: float) -> void:
     last_food = current; last_food_max = maximum
@@ -94,7 +110,7 @@ func set_environment(text: String, heat_danger: bool, cold_danger: bool) -> void
         environment_label.text += " • " + SettingsManager.t("cold")
         environment_label.add_theme_color_override("font_color", Color("#87c9f2"))
     else:
-        environment_label.add_theme_color_override("font_color", Color("#e8ddb7"))
+        environment_label.add_theme_color_override("font_color", Color("#f6e7c8"))
 
 func set_preparation_time(seconds_left: float) -> void:
     boss_mode = false
@@ -133,23 +149,53 @@ func hide_boss() -> void:
 func _update_layout() -> void:
     if not is_node_ready():
         return
-    var size := get_viewport().get_visible_rect().size
-    top_panel.offset_right = -20.0
-    var compact := size.x < 1120.0
-    health_bar.custom_minimum_size.x = 180.0 if compact else 250.0
-    xp_bar.custom_minimum_size.x = 180.0 if compact else 250.0
-    region_label.add_theme_font_size_override("font_size", 18 if compact else 20)
-    timer_label.add_theme_font_size_override("font_size", 19 if compact else 22)
-    objective_label.add_theme_font_size_override("font_size", 16 if compact else 18)
-    objective_label.visible = true
-    environment_label.add_theme_font_size_override("font_size", 16 if compact else 18)
-    weapon_label.add_theme_font_size_override("font_size", 18 if compact else 20)
+    var screen_width := get_viewport().get_visible_rect().size.x
+    var compact := screen_width < 1000.0
+    var tiny := screen_width < 860.0
+    var vitals: PanelContainer = $Root/Vitals
+    var tools: PanelContainer = $Root/ToolCard
+    var location: PanelContainer = $Root/LocationCard
+    var clock: PanelContainer = $Root/TimeCard
+    var climate: PanelContainer = $Root/ClimateCard
+    var objective_panel: PanelContainer = $Root/ObjectiveCard
+    vitals.offset_right = 256.0 if tiny else (274.0 if compact else 305.0)
+    tools.offset_right = vitals.offset_right
+    location.offset_left = -150.0 if compact else -221.0
+    location.offset_right = 150.0 if compact else 221.0
+    clock.offset_left = -158.0 if compact else -188.0
+    climate.offset_left = -196.0 if compact else -236.0
+    objective_panel.offset_left = -235.0 if compact else -333.0
+    objective_panel.offset_right = 235.0 if compact else 333.0
+    health_bar.custom_minimum_size.x = 162.0 if tiny else (174.0 if compact else 207.0)
+    xp_bar.custom_minimum_size.x = health_bar.custom_minimum_size.x
+    region_label.add_theme_font_size_override("font_size", 13 if compact else 16)
+    timer_label.add_theme_font_size_override("font_size", 13 if compact else 16)
+    objective_label.add_theme_font_size_override("font_size", 12 if compact else 14)
+    environment_label.add_theme_font_size_override("font_size", 12 if compact else 14)
+    weapon_label.add_theme_font_size_override("font_size", 12 if compact else 14)
+    # Em janelas muito estreitas, o nome da região vai para a faixa inferior,
+    # evitando que o texto cubra as barras de PV/XP e o cronômetro.
+    location.visible = not tiny
+    climate.visible = not tiny
 
-func show_banner(_text: String, _duration: float = 2.3) -> void:
-    # Mensagens grandes no centro da tela foram removidas.
-    # Informacoes persistentes continuam no HUD, menus e barras.
+func show_banner(text: String, duration: float = 2.3) -> void:
     banner_token += 1
-    banner.visible = false
+    var own_token := banner_token
+    banner.text = text
+    banner.visible = true
+    banner.modulate.a = 0.0
+    var fade_in := create_tween()
+    fade_in.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+    fade_in.tween_property(banner, "modulate:a", 1.0, 0.23)
+    await get_tree().create_timer(maxf(duration, 0.6), true, false, true).timeout
+    if not is_instance_valid(banner) or own_token != banner_token:
+        return
+    var fade_out := create_tween()
+    fade_out.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+    fade_out.tween_property(banner, "modulate:a", 0.0, 0.35)
+    await fade_out.finished
+    if is_instance_valid(banner) and own_token == banner_token:
+        banner.visible = false
 
 func _format_time(value: float) -> String:
     var total := maxi(0, int(ceil(value)))

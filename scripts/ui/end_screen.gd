@@ -10,6 +10,7 @@ var last_victory := false
 var last_level := 1
 
 func _ready() -> void:
+    YawaraSkin.apply($Root)
     process_mode = Node.PROCESS_MODE_ALWAYS
     restart_button.pressed.connect(_restart)
     menu_button.pressed.connect(_menu)
@@ -45,4 +46,4 @@ func _restart() -> void:
 
 func _menu() -> void:
     get_tree().paused = false
-    get_tree().change_scene_to_file("res://scenes/ui/title_screen.tscn")
+    get_tree().change_scene_to_file("res://assets/title_screen.tscn")

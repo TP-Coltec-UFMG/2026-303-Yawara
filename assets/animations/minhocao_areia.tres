@@ -1,0 +1,128 @@
+[gd_resource type="SpriteFrames" load_steps=10 format=3 uid="uid://bgwhuy6varsqt"]
+
+[ext_resource type="Texture2D" uid="uid://dryp81qr5cqdq" path="res://assets/sprites/enemies/ninja_pack/snake3.png" id="tex0"]
+
+[sub_resource type="AtlasTexture" id="frame0"]
+atlas = ExtResource("tex0")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="frame1"]
+atlas = ExtResource("tex0")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="frame2"]
+atlas = ExtResource("tex0")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="frame3"]
+atlas = ExtResource("tex0")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="frame4"]
+atlas = ExtResource("tex0")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="frame5"]
+atlas = ExtResource("tex0")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="frame6"]
+atlas = ExtResource("tex0")
+region = Rect2(32, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="frame7"]
+atlas = ExtResource("tex0")
+region = Rect2(48, 32, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("frame0")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame1")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame2")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame3")
+}],
+"loop": false,
+"name": &"attack_left",
+"speed": 13.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("frame4")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame5")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame6")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame7")
+}],
+"loop": false,
+"name": &"attack_right",
+"speed": 13.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("frame0")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame1")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("frame4")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame5")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("frame0")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame1")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame2")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame3")
+}],
+"loop": true,
+"name": &"walk_left",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("frame4")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame5")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame6")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame7")
+}],
+"loop": true,
+"name": &"walk_right",
+"speed": 10.0
+}]

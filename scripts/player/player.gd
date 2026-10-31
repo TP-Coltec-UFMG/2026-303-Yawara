@@ -1,7 +1,7 @@
 class_name Player
 extends CharacterBody2D
 
-const SpriteAnimUtils := preload("res://scripts/core/sprite_anim_utils.gd")
+const AnimacaoSprite := preload("res://scripts/core/sprite_anim_utils.gd")
 
 signal health_changed(current: float, maximum: float)
 signal xp_changed(current: int, needed: int, level: int)
@@ -136,13 +136,17 @@ var camera_shake_strength := 0.0
 var use_animated_sprite := false
 var facing_direction := "right"
 var attack_animation_time := 0.0
+var footstep_sound_timer: float = 0.0
+var overhead_health: ProgressBar
+var overhead_health_fill: StyleBoxFlat
 
 func _ready() -> void:
     motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
-    up_direction = Vector2.ZERO
     add_to_group("player")
     health.health_changed.connect(_on_health_changed)
     health.died.connect(_on_died)
+    _create_overhead_health()
+    _on_health_changed(health.current_health, health.max_health)
     _ensure_animated_sprite()
     _try_load_sprite()
     camera.limit_left = -100000000
@@ -179,6 +183,12 @@ func _ensure_animated_sprite() -> void:
     add_child(animated_sprite)
 
 func _try_load_sprite() -> void:
+    if animated_sprite != null and animated_sprite.sprite_frames != null:
+        use_animated_sprite = true
+        sprite.visible = false
+        base_sprite_scale = animated_sprite.scale
+        animated_sprite.play("idle_right")
+        return
     var idle_path := "res://assets/sprites/player/ninja_green/idle.png"
     var walk_path := "res://assets/sprites/player/ninja_green/walk.png"
     var attack_path := "res://assets/sprites/player/ninja_green/attack.png"
@@ -198,7 +208,7 @@ func _try_load_sprite() -> void:
         var dead_tex: Texture2D = null
         if ResourceLoader.exists(dead_path):
             dead_tex = load(dead_path) as Texture2D
-        animated_sprite.sprite_frames = SpriteAnimUtils.create_directional_frames_from_separate_sheets(idle_tex, walk_tex, attack_tex, dead_tex)
+        animated_sprite.sprite_frames = AnimacaoSprite.create_directional_frames_from_separate_sheets(idle_tex, walk_tex, attack_tex, dead_tex)
         animated_sprite.visible = true
         animated_sprite.centered = true
         animated_sprite.scale = Vector2.ONE * 2.3
@@ -221,6 +231,7 @@ func _try_load_sprite() -> void:
             return
 
 func _physics_process(delta: float) -> void:
+    rotation = 0.0
     attack_timer = maxf(0.0, attack_timer - delta)
     attack_animation_time = maxf(0.0, attack_animation_time - delta)
     dash_timer = maxf(0.0, dash_timer - delta)
@@ -252,6 +263,15 @@ func _physics_process(delta: float) -> void:
     invulnerable = dash_time_left > 0.0 or hurt_invulnerability > 0.0
 
     move_and_slide()
+
+    # Soft footsteps, synced to travel, muted while stationary or dashing.
+    footstep_sound_timer = maxf(0.0, footstep_sound_timer - delta)
+    if velocity.length() > 45.0 and dash_time_left <= 0.0 and not pending_level_up:
+        if footstep_sound_timer <= 0.0:
+            footstep_sound_timer = 0.30
+            AudioManager.play_sfx("footstep.wav")
+    else:
+        footstep_sound_timer = minf(footstep_sound_timer, 0.10)
 
     if Input.is_action_pressed("attack") and attack_timer <= 0.0 and not pending_level_up:
         _attack()
@@ -289,7 +309,7 @@ func _update_player_animation(input_vector: Vector2) -> void:
         anim = "%s_%s" % [prefix, facing_direction]
         if not animated_sprite.sprite_frames.has_animation(anim):
             anim = "%s_right" % prefix
-    if animated_sprite.animation != anim and animated_sprite.sprite_frames.has_animation(anim):
+    if (animated_sprite.animation != anim or not animated_sprite.is_playing()) and animated_sprite.sprite_frames.has_animation(anim):
         animated_sprite.play(anim)
 
 func _update_environment_damage(delta: float) -> void:
@@ -427,7 +447,7 @@ func unlock_random_weapon() -> String:
     return chosen
 
 func _attack() -> void:
-    attack_animation_time = 0.22
+    attack_animation_time = 0.32
     var weapon: Dictionary = WeaponDB.get_weapon(current_weapon)
     attack_timer = attack_cooldown * float(weapon["cooldown"]) * attack_penalty * _size_attack_penalty()
     attack_counter += 1
@@ -868,6 +888,8 @@ func _refresh_body_visual() -> void:
         sprite.scale = base_sprite_scale * body_size
     if is_instance_valid(evolution_visuals):
         evolution_visuals.scale = Vector2.ONE * body_size
+    if is_instance_valid(overhead_health):
+        overhead_health.position = Vector2(-33.0, -53.0 - 13.0 * body_size)
     _refresh_weapon_visual()
     if is_instance_valid(collision_shape) and collision_shape.shape is CircleShape2D:
         var shape := collision_shape.shape as CircleShape2D
@@ -1168,7 +1190,46 @@ func get_build_stats() -> Dictionary:
         "equipped_movement": equipped_movement,
     }
 
+# Barra pequena sobre Aruan, visível apenas quando estiver ferido.
+# A HUD mantém os PV permanentes; o indicador local ajuda durante o combate.
+func _create_overhead_health() -> void:
+    overhead_health = ProgressBar.new()
+    overhead_health.name = "OverheadHealth"
+    overhead_health.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    overhead_health.show_percentage = false
+    overhead_health.max_value = health.max_health
+    overhead_health.value = health.current_health
+    overhead_health.size = Vector2(66.0, 8.0)
+    overhead_health.custom_minimum_size = Vector2(66.0, 8.0)
+    overhead_health.position = Vector2(-33.0, -62.0)
+    overhead_health.z_index = 17
+    var bar_background := StyleBoxFlat.new()
+    bar_background.bg_color = Color(0.08, 0.18, 0.14, 0.90)
+    bar_background.border_color = Color(0.90, 0.88, 0.71, 0.80)
+    bar_background.set_border_width_all(1)
+    bar_background.set_corner_radius_all(3)
+    overhead_health.add_theme_stylebox_override("background", bar_background)
+    overhead_health_fill = StyleBoxFlat.new()
+    overhead_health_fill.bg_color = Color("#a3d88c")
+    overhead_health_fill.set_corner_radius_all(2)
+    overhead_health.add_theme_stylebox_override("fill", overhead_health_fill)
+    add_child(overhead_health)
+    overhead_health.hide()
+
 func _on_health_changed(current: float, maximum: float) -> void:
+    if is_instance_valid(overhead_health):
+        overhead_health.max_value = maxf(maximum, 1.0)
+        overhead_health.value = clampf(current, 0.0, maximum)
+        var fraction := current / maxf(maximum, 1.0)
+        # Acima de 75%: indicador oculto para manter a tela limpa.
+        overhead_health.visible = current > 0.0 and fraction < 0.75
+        if overhead_health_fill != null:
+            if fraction <= 0.30:
+                overhead_health_fill.bg_color = Color("#f16d63")
+            elif fraction <= 0.55:
+                overhead_health_fill.bg_color = Color("#f0bf66")
+            else:
+                overhead_health_fill.bg_color = Color("#a3d88c")
     health_changed.emit(current, maximum)
 
 func _on_died() -> void:

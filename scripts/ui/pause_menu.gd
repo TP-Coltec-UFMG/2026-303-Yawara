@@ -14,6 +14,7 @@ extends CanvasLayer
 var opened := false
 
 func _ready() -> void:
+    YawaraSkin.apply($Root)
     process_mode = Node.PROCESS_MODE_ALWAYS
     root.visible = false
     settings_panel.visible = false
@@ -77,7 +78,7 @@ func _close_settings() -> void:
 func _go_to_menu() -> void:
     opened = false
     get_tree().paused = false
-    get_tree().change_scene_to_file("res://scenes/ui/title_screen.tscn")
+    get_tree().change_scene_to_file("res://assets/title_screen.tscn")
 
 func _quit() -> void:
     get_tree().quit()

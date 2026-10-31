@@ -1,0 +1,189 @@
+[gd_scene format=3 uid="uid://d3xtlbv6xix2w"]
+
+[ext_resource type="Script" uid="uid://cu3jyivayna0e" path="res://scripts/ui/title_screen.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://0kdtfeppctbh" path="res://YAWARA_ A Lenda dos 5 Territórios.png" id="2_yvebc"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="3"]
+[ext_resource type="Shader" uid="uid://cxoukuwli66av" path="res://assets/shaders/menu_dusk.gdshader" id="4"]
+
+[sub_resource type="ShaderMaterial" id="Twilight"]
+shader = ExtResource("4")
+
+[node name="TitleScreen" type="Control" unique_id=304260213]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1909762981]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_yvebc")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Twilight" type="ColorRect" parent="." unique_id=1518462814]
+material = SubResource("Twilight")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -3.0
+offset_right = -4.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Buttons" type="VBoxContainer" parent="." unique_id=1188412697]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.605
+anchor_right = 0.5
+anchor_bottom = 0.605
+offset_left = -190.0
+offset_top = -78.600006
+offset_right = 222.0
+offset_bottom = 142.4
+grow_horizontal = 2
+theme_override_constants/separation = 11
+
+[node name="Start" type="Button" parent="Buttons" unique_id=930568310]
+custom_minimum_size = Vector2(0, 47)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.94, 0.78, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.07, 0.04, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 21
+text = "INICIAR"
+
+[node name="RunOptions" type="Button" parent="Buttons" unique_id=446000392]
+custom_minimum_size = Vector2(0, 47)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.94, 0.78, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.07, 0.04, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 21
+text = "OPÇÕES DA PARTIDA"
+
+[node name="Settings" type="Button" parent="Buttons" unique_id=1381484494]
+custom_minimum_size = Vector2(0, 47)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.94, 0.78, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.07, 0.04, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 21
+text = "CONFIGURAÇÕES"
+
+[node name="Quit" type="Button" parent="Buttons" unique_id=2046735921]
+custom_minimum_size = Vector2(0, 47)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.94, 0.78, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.07, 0.04, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 21
+text = "SAIR"
+
+[node name="RunOptions" type="Control" parent="." unique_id=34099057]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="RunOptions" unique_id=1944058212]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.012, 0.055, 0.055, 0.83)
+
+[node name="Center" type="CenterContainer" parent="RunOptions" unique_id=1833056668]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="RunOptions/Center" unique_id=769835121]
+custom_minimum_size = Vector2(470, 0)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="RunOptions/Center/Panel" unique_id=1070652853]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="Box" type="VBoxContainer" parent="RunOptions/Center/Panel/Margin" unique_id=991554217]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ModeLabel" type="Label" parent="RunOptions/Center/Panel/Margin/Box" unique_id=999992480]
+layout_mode = 2
+text = "Modo"
+
+[node name="Mode" type="OptionButton" parent="RunOptions/Center/Panel/Margin/Box" unique_id=862818183]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="PressureLabel" type="Label" parent="RunOptions/Center/Panel/Margin/Box" unique_id=1958822794]
+layout_mode = 2
+text = "Pressão (0–20)"
+
+[node name="Pressure" type="SpinBox" parent="RunOptions/Center/Panel/Margin/Box" unique_id=1347654985]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+max_value = 20.0
+
+[node name="GeneticLabel" type="Label" parent="RunOptions/Center/Panel/Margin/Box" unique_id=1908995237]
+layout_mode = 2
+text = "Genética inicial"
+
+[node name="Genetic" type="OptionButton" parent="RunOptions/Center/Panel/Margin/Box" unique_id=1373486898]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="SpliceLabel" type="Label" parent="RunOptions/Center/Panel/Margin/Box" unique_id=1715860606]
+layout_mode = 2
+text = "Genética secundária"
+
+[node name="Splice" type="OptionButton" parent="RunOptions/Center/Panel/Margin/Box" unique_id=284673389]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="Close" type="Button" parent="RunOptions/Center/Panel/Margin/Box" unique_id=2016085758]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "VOLTAR"
+
+[node name="SettingsPanel" parent="." unique_id=478669648 instance=ExtResource("3")]
+visible = false
+layout_mode = 1

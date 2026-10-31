@@ -38,8 +38,10 @@ const GUARDIAN_SHEETS := {
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 var player: Player
-var biome_index := 0
-var boss_id := "mapinguari"
+@export_range(0, 3) var biome_index: int = 0
+@export var boss_id: String = "mapinguari"
+var _configured := false
+@onready var animated_sprite: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 var boss_name := "Guardião Ancestral"
 var power_name := "Poder Ancestral"
 var attack_pattern := "poison"
@@ -59,9 +61,20 @@ func _ready() -> void:
     add_to_group("enemies")
     add_to_group("minibosses")
     health.died.connect(_on_died)
+    health.health_changed.connect(_update_health_bar)
     player = get_tree().get_first_node_in_group("player") as Player
+    call_deferred("_configure_standalone")
+
+func _update_health_bar(current: float, maximum: float) -> void:
+    $HealthBar.max_value = maximum
+    $HealthBar.value = current
+
+func _configure_standalone() -> void:
+    if not _configured:
+        configure(biome_index, 1.0, boss_id)
 
 func configure(biome: int, difficulty_value: float, new_boss_id: String = "") -> void:
+    _configured = true
     biome_index = clampi(biome, 0, BiomeDB.BIOMES.size() - 1)
     difficulty = maxf(1.0, difficulty_value)
     boss_id = new_boss_id if BiomeDB.MINIBOSSES.has(new_boss_id) else BiomeDB.choose_miniboss_for_biome(biome_index)
@@ -79,6 +92,10 @@ func configure(biome: int, difficulty_value: float, new_boss_id: String = "") ->
     queue_redraw()
 
 func _try_load_sprite() -> void:
+    if animated_sprite != null and animated_sprite.sprite_frames != null:
+        sprite.hide()
+        animated_sprite.play("walk")
+        return
     var path := "res://assets/sprites/miniboss/%s.png" % boss_id
     if ResourceLoader.exists(path):
         guardian_atlas = null
@@ -127,6 +144,7 @@ func _load_source_guardian() -> void:
         sprite.material = shader_material
 
 func _physics_process(delta: float) -> void:
+    rotation = 0.0
     if not is_instance_valid(player):
         player = get_tree().get_first_node_in_group("player") as Player
         return
@@ -147,6 +165,10 @@ func _physics_process(delta: float) -> void:
     queue_redraw()
 
 func _update_guardian_animation(delta: float) -> void:
+    if animated_sprite != null:
+        if absf(velocity.x) > 1.0:
+            animated_sprite.flip_h = velocity.x < 0.0
+        return
     if guardian_atlas == null or guardian_walk_frames.size() <= 1:
         return
     guardian_frame_timer -= delta
@@ -202,7 +224,7 @@ func _on_died() -> void:
     queue_free()
 
 func _draw() -> void:
-    if sprite.texture != null:
+    if sprite.texture != null or animated_sprite != null:
         return
     var data: Dictionary = BiomeDB.get_biome(biome_index)
     var c: Color = data["detail"]

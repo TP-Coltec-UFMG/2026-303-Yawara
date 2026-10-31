@@ -1,0 +1,28 @@
+[gd_resource type="SpriteFrames" load_steps=17 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r0c0.png" id="tex0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r0c1.png" id="tex1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r1c0.png" id="tex2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r1c1.png" id="tex3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r1c2.png" id="tex4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r1c3.png" id="tex5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r2c0.png" id="tex6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r2c1.png" id="tex7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r2c2.png" id="tex8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r2c3.png" id="tex9"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r3c0.png" id="tex10"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r3c1.png" id="tex11"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r3c2.png" id="tex12"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r4c0.png" id="tex13"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r4c1.png" id="tex14"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/carcara/r4c2.png" id="tex15"]
+
+[resource]
+animations = [
+{"name": &"idle_right", "speed": 5.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex0")}]},
+{"name": &"idle_left", "speed": 5.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex1")}]},
+{"name": &"walk_right", "speed": 9.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex2")}, {"duration": 1.0, "texture": ExtResource("tex3")}, {"duration": 1.0, "texture": ExtResource("tex4")}, {"duration": 1.0, "texture": ExtResource("tex5")}]},
+{"name": &"walk_left", "speed": 9.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex6")}, {"duration": 1.0, "texture": ExtResource("tex7")}, {"duration": 1.0, "texture": ExtResource("tex8")}, {"duration": 1.0, "texture": ExtResource("tex9")}]},
+{"name": &"attack_right", "speed": 11.0, "loop": false, "frames": [{"duration": 1.0, "texture": ExtResource("tex10")}, {"duration": 1.0, "texture": ExtResource("tex11")}, {"duration": 1.0, "texture": ExtResource("tex12")}]},
+{"name": &"attack_left", "speed": 11.0, "loop": false, "frames": [{"duration": 1.0, "texture": ExtResource("tex13")}, {"duration": 1.0, "texture": ExtResource("tex14")}, {"duration": 1.0, "texture": ExtResource("tex15")}]}
+]

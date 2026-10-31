@@ -27,8 +27,14 @@ func reset_run() -> void:
     run_seed = int(Time.get_unix_time_from_system()) ^ int(Time.get_ticks_usec())
 
 func configure_run(mode: int, pressure: int = 0, genetic: String = "standard", secondary: String = "") -> void:
-    run_mode = mode
-    pressure_level = clampi(pressure, 0, 20)
+    match mode:
+        RunMode.PRESSURE:
+            run_mode = RunMode.PRESSURE
+        RunMode.ENDLESS:
+            run_mode = RunMode.ENDLESS
+        _:
+            run_mode = RunMode.NORMAL
+    pressure_level = clampi(pressure, 0, 20) if mode == RunMode.PRESSURE else 0
     selected_genetic = genetic if GeneticsDB.GENETICS.has(genetic) else "standard"
     selected_secondary_genetic = secondary if GeneticsDB.GENETICS.has(secondary) else ""
 

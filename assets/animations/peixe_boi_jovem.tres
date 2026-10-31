@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://b4givy682ym05"]
+
+[ext_resource type="Texture2D" uid="uid://bckmpoospn5jo" path="res://assets/sprites/enemies/ninja_pack/pig_black.png" id="tex0"]
+
+[sub_resource type="AtlasTexture" id="frame0"]
+atlas = ExtResource("tex0")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="frame1"]
+atlas = ExtResource("tex0")
+region = Rect2(16, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("frame0")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame1")
+}],
+"loop": false,
+"name": &"attack_side",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("frame0")
+}],
+"loop": true,
+"name": &"idle_side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("frame0")
+}, {
+"duration": 1.0,
+"texture": SubResource("frame1")
+}],
+"loop": true,
+"name": &"walk_side",
+"speed": 8.0
+}]

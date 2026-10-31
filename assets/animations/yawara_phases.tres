@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=25 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p1_idle_00.png" id="tex0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p1_walk_00.png" id="tex1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p1_walk_01.png" id="tex2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p1_walk_02.png" id="tex3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p1_walk_03.png" id="tex4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p1_attack_00.png" id="tex5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p1_attack_01.png" id="tex6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p1_attack_02.png" id="tex7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p2_idle_00.png" id="tex8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p2_walk_00.png" id="tex9"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p2_walk_01.png" id="tex10"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p2_walk_02.png" id="tex11"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p2_walk_03.png" id="tex12"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p2_attack_00.png" id="tex13"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p2_attack_01.png" id="tex14"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p2_attack_02.png" id="tex15"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p3_idle_00.png" id="tex16"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p3_walk_00.png" id="tex17"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p3_walk_01.png" id="tex18"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p3_walk_02.png" id="tex19"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p3_walk_03.png" id="tex20"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p3_attack_00.png" id="tex21"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p3_attack_01.png" id="tex22"]
+[ext_resource type="Texture2D" path="res://assets/sprites/boss_fixed/p3_attack_02.png" id="tex23"]
+
+[resource]
+animations = [
+{"name": &"phase_1_idle", "speed": 5.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex0")}]},
+{"name": &"phase_1_walk", "speed": 7.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex1")}, {"duration": 1.0, "texture": ExtResource("tex2")}, {"duration": 1.0, "texture": ExtResource("tex3")}, {"duration": 1.0, "texture": ExtResource("tex4")}]},
+{"name": &"phase_1_attack", "speed": 9.0, "loop": false, "frames": [{"duration": 1.0, "texture": ExtResource("tex5")}, {"duration": 1.0, "texture": ExtResource("tex6")}, {"duration": 1.0, "texture": ExtResource("tex7")}]},
+{"name": &"phase_2_idle", "speed": 5.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex8")}]},
+{"name": &"phase_2_walk", "speed": 7.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex9")}, {"duration": 1.0, "texture": ExtResource("tex10")}, {"duration": 1.0, "texture": ExtResource("tex11")}, {"duration": 1.0, "texture": ExtResource("tex12")}]},
+{"name": &"phase_2_attack", "speed": 9.0, "loop": false, "frames": [{"duration": 1.0, "texture": ExtResource("tex13")}, {"duration": 1.0, "texture": ExtResource("tex14")}, {"duration": 1.0, "texture": ExtResource("tex15")}]},
+{"name": &"phase_3_idle", "speed": 5.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex16")}]},
+{"name": &"phase_3_walk", "speed": 7.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex17")}, {"duration": 1.0, "texture": ExtResource("tex18")}, {"duration": 1.0, "texture": ExtResource("tex19")}, {"duration": 1.0, "texture": ExtResource("tex20")}]},
+{"name": &"phase_3_attack", "speed": 9.0, "loop": false, "frames": [{"duration": 1.0, "texture": ExtResource("tex21")}, {"duration": 1.0, "texture": ExtResource("tex22")}, {"duration": 1.0, "texture": ExtResource("tex23")}]}
+]

@@ -30,7 +30,7 @@ static func create_directional_frames_from_separate_sheets(idle_tex: Texture2D, 
         frames.add_animation("dead")
         frames.set_animation_speed("dead", 7.0)
         frames.set_animation_loop("dead", false)
-        var columns: int = maxi(1, int(dead_tex.get_width() / frame_size.x))
+        var columns: int = maxi(1, floori(float(dead_tex.get_width()) / float(frame_size.x)))
         for col in range(columns):
             frames.add_frame("dead", _make_atlas(dead_tex, Rect2(col * frame_size.x, 0, frame_size.x, frame_size.y)))
     return frames
@@ -39,14 +39,14 @@ static func create_grid4_frames(texture: Texture2D, frame_size: Vector2i = Vecto
     var frames := SpriteFrames.new()
     if texture == null:
         return frames
-    for row in range(min(order.size(), int(texture.get_height() / frame_size.y))):
+    for row in range(min(order.size(), floori(float(texture.get_height()) / float(frame_size.y)))):
         var dir := String(order[row])
         for prefix in ["idle", "walk", "attack"]:
             var anim_name := "%s_%s" % [prefix, dir]
             frames.add_animation(anim_name)
             frames.set_animation_speed(anim_name, 7.0 if prefix == "idle" else (10.0 if prefix == "walk" else 13.0))
             frames.set_animation_loop(anim_name, prefix != "attack")
-        var available_cols := int(texture.get_width() / frame_size.x)
+        var available_cols := floori(float(texture.get_width()) / float(frame_size.x))
         for col in range(min(4, available_cols)):
             var atlas := _make_atlas(texture, Rect2(col * frame_size.x, row * frame_size.y, frame_size.x, frame_size.y))
             frames.add_frame("walk_%s" % dir, atlas)
@@ -63,7 +63,7 @@ static func create_side_frames(texture: Texture2D, frame_size: Vector2i = Vector
         frames.add_animation(anim_name)
         frames.set_animation_speed(anim_name, 8.0 if anim_name == "idle_side" else (9.0 if anim_name == "walk_side" else 12.0))
         frames.set_animation_loop(anim_name, anim_name != "attack_side")
-    var cols: int = mini(columns, maxi(1, int(texture.get_width() / frame_size.x)))
+    var cols: int = mini(columns, maxi(1, floori(float(texture.get_width()) / float(frame_size.x))))
     for col in range(cols):
         var atlas := _make_atlas(texture, Rect2(col * frame_size.x, 0, frame_size.x, frame_size.y))
         if col == 0:

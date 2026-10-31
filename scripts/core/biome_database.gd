@@ -4,10 +4,10 @@ extends Node
 # perder os cinco guardioes: Mata Atlantica e Amazonia compartilham o bioma de
 # floresta, enquanto Yawara permanece o sexto chefe e encerra a run.
 const BIOMES := [
-    {"id":0,"name":"Grande Floresta","biome":"Amazonia e Mata Atlantica","short":"GRANDE FLORESTA","ground":Color("#173f31"),"accent":Color("#2c7750"),"detail":Color("#8fbd70"),"tree_kind":"amazon_tree","fruit":"acai e jabuticaba","food_asset":"acai","lake_chance":0.28,"base_terrain":1.0,"climate":"rain","miniboss_pool":["mapinguari","corpo_seco"]},
-    {"id":1,"name":"Sertao de Pedra","biome":"Caatinga","short":"CAATINGA","ground":Color("#705029"),"accent":Color("#aa7734"),"detail":Color("#d5b45a"),"tree_kind":"caatinga_tree","fruit":"umbu","food_asset":"umbu","lake_chance":0.07,"base_terrain":0.91,"climate":"heatwave","miniboss_pool":["cabra_cabriola"]},
-    {"id":2,"name":"Aguas do Pantanal","biome":"Pantanal e Cerrado","short":"PANTANAL","ground":Color("#445129"),"accent":Color("#71863a"),"detail":Color("#a6aa53"),"tree_kind":"cerrado_tree","fruit":"pequi","food_asset":"pequi","lake_chance":0.58,"base_terrain":0.87,"climate":"soak","miniboss_pool":["minhocao"]},
-    {"id":3,"name":"Campos de Geada","biome":"Pampas e Araucarias","short":"PAMPAS GELADOS","ground":Color("#2b4335"),"accent":Color("#54715a"),"detail":Color("#b6c9d4"),"tree_kind":"araucaria","fruit":"pinhao","food_asset":"pinhao","lake_chance":0.15,"base_terrain":0.96,"climate":"blizzard","miniboss_pool":["teiniagua"]}
+    {"id":0,"name":"Grande Floresta","biome":"Amazonia e Mata Atlantica","short":"GRANDE FLORESTA","ground":Color("#31694a"),"accent":Color("#2c7750"),"detail":Color("#8fbd70"),"tree_kind":"amazon_tree","fruit":"acai e jabuticaba","food_asset":"acai","lake_chance":0.28,"base_terrain":1.0,"climate":"rain","miniboss_pool":["mapinguari","corpo_seco"]},
+    {"id":1,"name":"Sertao de Pedra","biome":"Caatinga","short":"CAATINGA","ground":Color("#ab7342"),"accent":Color("#aa7734"),"detail":Color("#d5b45a"),"tree_kind":"caatinga_tree","fruit":"umbu","food_asset":"umbu","lake_chance":0.07,"base_terrain":0.91,"climate":"heatwave","miniboss_pool":["cabra_cabriola"]},
+    {"id":2,"name":"Aguas do Pantanal","biome":"Pantanal e Cerrado","short":"PANTANAL","ground":Color("#5b805b"),"accent":Color("#71863a"),"detail":Color("#a6aa53"),"tree_kind":"cerrado_tree","fruit":"pequi","food_asset":"pequi","lake_chance":0.58,"base_terrain":0.87,"climate":"soak","miniboss_pool":["minhocao"]},
+    {"id":3,"name":"Campos de Geada","biome":"Pampas e Araucarias","short":"PAMPAS GELADOS","ground":Color("#688f8d"),"accent":Color("#54715a"),"detail":Color("#b6c9d4"),"tree_kind":"araucaria","fruit":"pinhao","food_asset":"pinhao","lake_chance":0.15,"base_terrain":0.96,"climate":"blizzard","miniboss_pool":["teiniagua"]}
 ]
 
 const MINIBOSSES := {

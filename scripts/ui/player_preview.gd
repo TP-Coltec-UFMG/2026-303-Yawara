@@ -7,6 +7,26 @@ var player_level := 1
 var body_size := 1.0
 
 func _ready() -> void:
+    _load_default_player_preview()
+    queue_redraw()
+
+func _load_default_player_preview() -> void:
+    # A tela de build deve mostrar um frame real do personagem, nao a
+    # spritesheet/fallback de 16x16 usada apenas por compatibilidade.
+    var frames_path := "res://assets/animations/player.tres"
+    if ResourceLoader.exists(frames_path):
+        var frames := load(frames_path) as SpriteFrames
+        if frames != null:
+            var animation := "idle_right"
+            if not frames.has_animation(animation):
+                var names := frames.get_animation_names()
+                if not names.is_empty():
+                    animation = String(names[0])
+            if frames.has_animation(animation) and frames.get_frame_count(animation) > 0:
+                player_texture = frames.get_frame_texture(animation, 0)
+                if player_texture != null:
+                    return
+
     var paths := [
         "res://assets/sprites/player/player.png",
         "res://assets/sprites/player/base.png"
@@ -15,6 +35,19 @@ func _ready() -> void:
         if ResourceLoader.exists(path):
             player_texture = load(path) as Texture2D
             break
+
+func set_player_visual(player: Player) -> void:
+    # Usa exatamente os SpriteFrames ativos no player. Assim, trocar o sprite
+    # do personagem tambem atualiza a foto mostrada em TAB/C.
+    if is_instance_valid(player) and is_instance_valid(player.animated_sprite) and player.animated_sprite.sprite_frames != null:
+        var frames := player.animated_sprite.sprite_frames
+        var animation := "idle_right"
+        if not frames.has_animation(animation):
+            animation = String(player.animated_sprite.animation)
+        if frames.has_animation(animation) and frames.get_frame_count(animation) > 0:
+            var texture := frames.get_frame_texture(animation, 0)
+            if texture != null:
+                player_texture = texture
     queue_redraw()
 
 func set_build(new_levels: Dictionary, new_player_level: int, new_body_size: float = 1.0) -> void:
@@ -25,16 +58,23 @@ func set_build(new_levels: Dictionary, new_player_level: int, new_body_size: flo
 
 func _draw() -> void:
     var area := Rect2(Vector2(8.0, 8.0), size - Vector2(16.0, 16.0))
-    draw_rect(area, Color("#43a549"))
-    for y in range(int(area.position.y), int(area.end.y), 24):
-        for x in range(int(area.position.x), int(area.end.x), 24):
-            if (floori(float(x) / 24.0) + floori(float(y) / 24.0)) % 3 == 0:
-                draw_circle(Vector2(x + 8, y + 10), 2.5, Color(0.20, 0.48, 0.22, 0.35))
+    draw_rect(area, Color("#17392f"))
+    var spotlight := size * Vector2(0.5, 0.56)
+    for ring in range(9, 0, -1):
+        draw_circle(spotlight, float(ring) * 14.0, Color(0.24, 0.61, 0.43, 0.025))
+    draw_arc(spotlight, minf(size.x, size.y) * 0.36, 0.0, TAU, 72, Color(Color("#cbaa67"), 0.55), 2.0, true)
 
     var center := size * Vector2(0.5, 0.53)
     if player_texture != null:
-        var side := minf(size.x, size.y) * 0.56 * body_size
-        draw_texture_rect(player_texture, Rect2(center - Vector2.ONE * side * 0.5, Vector2.ONE * side), false)
+        # Mantem a proporcao original. Antes a textura era forcada em um
+        # quadrado, deixando a foto achatada/esticada.
+        var texture_size := player_texture.get_size()
+        var max_width := size.x * 0.68 * body_size
+        var max_height := size.y * 0.72 * body_size
+        var fit := minf(max_width / maxf(1.0, texture_size.x), max_height / maxf(1.0, texture_size.y))
+        var draw_size := texture_size * fit
+        var draw_rect := Rect2(center - draw_size * 0.5, draw_size)
+        draw_texture_rect(player_texture, draw_rect, false)
     else:
         _draw_placeholder_player(center)
 

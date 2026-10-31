@@ -1,0 +1,65 @@
+[gd_resource type="SpriteFrames" load_steps=18 format=3 uid="uid://nl6usgknu6kx"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/idle_right_00.png" id="tex1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/idle_left_00.png" id="tex2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/walk_right_00.png" id="tex3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/walk_right_01.png" id="tex4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/walk_right_02.png" id="tex5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/walk_right_03.png" id="tex6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/walk_left_00.png" id="tex7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/walk_left_01.png" id="tex8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/walk_left_02.png" id="tex9"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/walk_left_03.png" id="tex10"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/attack_right_00.png" id="tex11"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/attack_right_01.png" id="tex12"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/attack_right_02.png" id="tex13"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/attack_left_00.png" id="tex14"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/attack_left_01.png" id="tex15"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/attack_left_02.png" id="tex16"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/aruan/dead_00.png" id="tex17"]
+
+[resource]
+animations = [
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("tex14")}, {"duration": 1.0, "texture": ExtResource("tex15")}, {"duration": 1.0, "texture": ExtResource("tex16")}],
+"loop": false,
+"name": &"attack_left",
+"speed": 10.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("tex11")}, {"duration": 1.0, "texture": ExtResource("tex12")}, {"duration": 1.0, "texture": ExtResource("tex13")}],
+"loop": false,
+"name": &"attack_right",
+"speed": 10.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("tex17")}],
+"loop": false,
+"name": &"dead",
+"speed": 1.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("tex2")}],
+"loop": true,
+"name": &"idle_left",
+"speed": 4.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("tex1")}],
+"loop": true,
+"name": &"idle_right",
+"speed": 4.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("tex7")}, {"duration": 1.0, "texture": ExtResource("tex8")}, {"duration": 1.0, "texture": ExtResource("tex9")}, {"duration": 1.0, "texture": ExtResource("tex10")}],
+"loop": true,
+"name": &"walk_left",
+"speed": 8.0
+},
+{
+"frames": [{"duration": 1.0, "texture": ExtResource("tex3")}, {"duration": 1.0, "texture": ExtResource("tex4")}, {"duration": 1.0, "texture": ExtResource("tex5")}, {"duration": 1.0, "texture": ExtResource("tex6")}],
+"loop": true,
+"name": &"walk_right",
+"speed": 8.0
+}
+]

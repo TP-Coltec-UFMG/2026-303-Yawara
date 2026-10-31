@@ -119,6 +119,7 @@ func _take_bite(body: Node) -> bool:
     bites_taken = next_bite
     _update_bite_visual()
     if is_final:
+        AudioManager.play_sfx("pickup.wav")
         queue_free()
     return true
 

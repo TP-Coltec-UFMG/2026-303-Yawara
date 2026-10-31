@@ -13,6 +13,7 @@ var opened := false
 var previous_pause_state := false
 
 func _ready() -> void:
+    YawaraSkin.apply($Root)
     process_mode = Node.PROCESS_MODE_ALWAYS
     root.visible = false
     close_button.pressed.connect(close)

@@ -42,6 +42,7 @@ var previous_pause_state := false
 var opened := false
 
 func _ready() -> void:
+    YawaraSkin.apply($Root)
     process_mode = Node.PROCESS_MODE_ALWAYS
     root.visible = false
     close_button.pressed.connect(close)
@@ -161,6 +162,7 @@ func _refresh(player: Player) -> void:
     var movement_name := String(CombatDB.MOVEMENTS[String(stats["equipped_movement"])]["name"])
     build_summary.text = "Nv. %d • %d/%d Progress • Arma: %s\nUltimate: %s • Dash: %s • Genetic: %s • 51 stats internos" % [int(stats["level"]), int(stats["xp"]), int(stats["xp_needed"]), String(stats["current_weapon"]), ultimate_name, movement_name, String(stats["genetic"])]
 
+    preview.set_player_visual(player)
     preview.set_build(player.upgrade_levels, player.level, float(stats["size"]))
     radar.set_values(stats["build_affinities"])
     mutagen_bar.value = minf(100.0, float(stats["mutagen"]))

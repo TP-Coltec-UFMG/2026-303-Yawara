@@ -14,7 +14,7 @@ const LANGUAGE_NAMES := {
 var master_volume := 1.0
 var music_volume := 0.82
 var sfx_volume := 0.90
-var fullscreen := false
+var fullscreen := true
 var language := "pt_BR"
 
 # Acessibilidade aplicada globalmente.
@@ -311,6 +311,7 @@ func _save_settings() -> void:
     config.set_value("audio", "music_volume", music_volume)
     config.set_value("audio", "sfx_volume", sfx_volume)
     config.set_value("video", "fullscreen", fullscreen)
+    config.set_value("video", "fullscreen_visual_v2", true)
     config.set_value("general", "language", language)
     config.set_value("accessibility", "high_contrast", high_contrast)
     config.set_value("accessibility", "reduce_motion", reduce_motion)
@@ -327,7 +328,12 @@ func _load_settings() -> void:
     master_volume = clampf(float(config.get_value("audio", "master_volume", master_volume)), 0.0, 1.0)
     music_volume = clampf(float(config.get_value("audio", "music_volume", music_volume)), 0.0, 1.0)
     sfx_volume = clampf(float(config.get_value("audio", "sfx_volume", sfx_volume)), 0.0, 1.0)
-    fullscreen = bool(config.get_value("video", "fullscreen", fullscreen))
+    # Primeira abertura desta versao: migrar preferencias antigas para tela cheia.
+    # Depois disso, respeitar a escolha do jogador no menu ou F11.
+    if bool(config.get_value("video", "fullscreen_visual_v2", false)):
+        fullscreen = bool(config.get_value("video", "fullscreen", fullscreen))
+    else:
+        fullscreen = true
     language = String(config.get_value("general", "language", language))
     if not SUPPORTED_LANGUAGES.has(language): language = "pt_BR"
     high_contrast = bool(config.get_value("accessibility", "high_contrast", high_contrast))

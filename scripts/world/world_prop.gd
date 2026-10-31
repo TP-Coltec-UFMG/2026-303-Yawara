@@ -31,16 +31,26 @@ func configure(kind: String, biome: int, seed_value: int) -> void:
     queue_redraw()
 
 func _try_load_sprite() -> void:
-    var biome_data: Dictionary = BiomeDB.get_biome(biome_index)
-    var file_name := prop_kind
-    if prop_kind == "tree":
-        file_name = String(biome_data["tree_kind"])
-    var path := "res://assets/sprites/world/%s.png" % file_name
+    # Remove completamente os antigos sprites de arvores e rochas.
+    # Props funcionais agora usam EXCLUSIVAMENTE os recursos novos do bioma.
+    const DECOR_VARIANTS = [
+        ["forest_bush_01.png", "forest_moss_rock_01.png"],
+        ["sertao_bush_01.png", "sertao_pebble_01.png"],
+        ["pantanal_reed_01.png", "pantanal_mud_01.png"],
+        ["geada_bush_01.png", "geada_rock_01.png"]
+    ]
+    var folder: String = ["forest", "sertao", "pantanal", "geada"][biome_index]
+    var file_name: String = DECOR_VARIANTS[biome_index][0 if prop_kind == "tree" else 1]
+    var path := "res://assets/sprites/ground_details/%s/%s" % [folder, file_name]
     if ResourceLoader.exists(path):
         sprite.texture = load(path) as Texture2D
-        var target := 76.0 if prop_kind == "tree" else 48.0
+    else:
+        sprite.texture = null
+    if sprite.texture != null:
+        var target := 57.0 if prop_kind == "tree" else 32.0
         var max_side := float(maxi(sprite.texture.get_width(), sprite.texture.get_height()))
-        sprite.scale = Vector2.ONE * target / maxf(max_side, 1.0)
+        sprite.scale = Vector2.ONE * (target / maxf(max_side, 1.0))
+
 
 func _physics_process(delta: float) -> void:
     if prop_kind != "tree":
@@ -70,32 +80,9 @@ func _drop_fruit(count: int) -> void:
         get_tree().call_group("game_world", "spawn_fruit", global_position + offset, String(data["fruit"]), biome_index, value)
 
 func _draw() -> void:
-    if sprite.texture != null:
-        return
-    var alpha := 1.0
-    if prop_kind == "rock":
-        var c := Color("#77746d")
-        c.a = alpha
-        draw_colored_polygon(PackedVector2Array([Vector2(-25, 15), Vector2(-19, -12), Vector2(-3, -25), Vector2(22, -15), Vector2(27, 13), Vector2(7, 24)]), c)
-        draw_line(Vector2(-13, -8), Vector2(10, 12), Color(0.22, 0.22, 0.21, alpha), 3.0)
-        return
-
-    var biome_data: Dictionary = BiomeDB.get_biome(biome_index)
-    var trunk := Color("#60432d")
-    trunk.a = alpha
-    var crown: Color = biome_data["accent"]
-    crown.a = alpha
-    if biome_index == 1:
-        # Forma seca/cacto para Caatinga.
-        draw_line(Vector2(0, 25), Vector2(0, -34), crown, 9.0)
-        draw_line(Vector2(0, -12), Vector2(-18, -23), crown, 7.0)
-        draw_line(Vector2(0, 0), Vector2(18, -12), crown, 7.0)
-    elif biome_index == 3:
-        draw_line(Vector2(0, 26), Vector2(0, -42), trunk, 8.0)
-        draw_colored_polygon(PackedVector2Array([Vector2(0, -51), Vector2(-32, -10), Vector2(32, -10)]), crown)
-        draw_colored_polygon(PackedVector2Array([Vector2(0, -34), Vector2(-26, 3), Vector2(26, 3)]), crown.darkened(0.08))
-    else:
-        draw_line(Vector2(0, 27), Vector2(0, -22), trunk, 9.0)
-        draw_circle(Vector2(-14, -28), 23.0, crown)
-        draw_circle(Vector2(14, -29), 24.0, crown.lightened(0.05))
-        draw_circle(Vector2(0, -44), 24.0, crown.darkened(0.05))
+    # Sombra suave embaixo de cada sprite: dá profundidade sem mudar colisões.
+    draw_set_transform(Vector2(0.0, 16.0), 0.0, Vector2(1.0, 0.28))
+    draw_circle(Vector2.ZERO, 29.0 if prop_kind == "tree" else 22.0, Color(0.015, 0.035, 0.026, 0.29))
+    draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+    # Sem formas antigas desenhadas se um PNG estiver ausente.
+    return

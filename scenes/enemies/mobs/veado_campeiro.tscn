@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/enemy.tscn" id="1"]
+[ext_resource type="SpriteFrames" path="res://assets/animations/veado_campeiro.tres" id="2"]
+
+[sub_resource type="CircleShape2D" id="BodyShape"]
+radius = 14.08
+
+[node name="veado_campeiro" instance=ExtResource("1")]
+species_id = "veado_campeiro"
+animated_mode = "side2"
+visual_body_size = 0.88
+
+[node name="AnimatedSprite2D" parent="." index="3"]
+scale = Vector2(0.09875751503006013, 0.09875751503006013)
+sprite_frames = ExtResource("2")
+animation = &"idle_side"
+autoplay = "idle_side"
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("BodyShape")

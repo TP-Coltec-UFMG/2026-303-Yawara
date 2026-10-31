@@ -1,7 +1,7 @@
 class_name Enemy
 extends CharacterBody2D
 
-const SpriteAnimUtils := preload("res://scripts/core/sprite_anim_utils.gd")
+const AnimacaoSprite := preload("res://scripts/core/sprite_anim_utils.gd")
 const ANIMATED_VISUALS := {
     "marimbondo_onca": {"path":"res://assets/sprites/enemies/ninja_pack/yellow_bat.png", "kind":"grid4", "scale":1.0},
     "minhocao_areia": {"path":"res://assets/sprites/enemies/ninja_pack/snake3.png", "kind":"grid4", "scale":1.0},
@@ -42,7 +42,10 @@ const ANIMATED_VISUALS := {
 
 var player: Player
 var biome_index := 0
-var species_id := "creature"
+@export var species_id: String = "capivara_amazonica"
+@export var visual_body_size: float = 1.08
+var _configured := false
+@onready var _scene_visual_scale: Vector2 = $AnimatedSprite2D.scale
 var creature_name := "Criatura"
 var temperament := "passive"
 var diet := "herbivore"
@@ -86,12 +89,11 @@ var food_target: Node2D
 var flee_timer := 0.0
 var steering_phase := 0.0
 var use_animated_sprite := false
-var animated_mode := "none"
+@export_enum("side2", "grid4") var animated_mode: String = "side2"
 var facing_direction := "right"
 
 func _ready() -> void:
     motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
-    up_direction = Vector2.ZERO
     add_to_group("enemies")
     add_to_group("creatures")
     health.died.connect(_on_died)
@@ -100,8 +102,17 @@ func _ready() -> void:
     player = get_tree().get_first_node_in_group("player") as Player
     steering_phase = randf_range(0.0, TAU)
     _pick_wander_direction()
+    call_deferred("_configure_standalone")
+
+func _configure_standalone() -> void:
+    if not _configured and BiomeDB.FAMILIES.has(species_id):
+        var data: Dictionary = BiomeDB.FAMILIES[species_id].duplicate(true)
+        data["id"] = species_id
+        var biomes: Array = data.get("biomes", [0])
+        configure_creature(data, int(biomes[0]), 1.0)
 
 func configure_creature(species: Dictionary, biome: int, difficulty_value: float) -> void:
+    _configured = true
     biome_index = clampi(biome, 0, BiomeDB.BIOMES.size() - 1)
     difficulty = maxf(0.75, difficulty_value)
     species_id = String(species.get("id", "creature"))
@@ -174,6 +185,12 @@ func _ensure_animated_sprite() -> void:
     add_child(animated_sprite)
 
 func _try_load_sprite() -> void:
+    if animated_sprite != null and animated_sprite.sprite_frames != null:
+        use_animated_sprite = true
+        sprite.visible = false
+        animated_sprite.visible = true
+        _fit_existing_sprite_frames()
+        return
     if _load_local_creature_frames():
         return
     if _load_mapped_pack_sprite():
@@ -181,17 +198,41 @@ func _try_load_sprite() -> void:
     var path := "res://assets/sprites/creatures/%s.png" % species_id
     if ResourceLoader.exists(path):
         sprite.texture = load(path) as Texture2D
-        var target_size := 54.0 * body_size
+        var target_size := 68.0 * body_size
         var max_side := float(maxi(sprite.texture.get_width(), sprite.texture.get_height()))
         sprite.scale = Vector2.ONE * (target_size / maxf(1.0, max_side))
 
-func _apply_animated_scale_from_dimensions(source_width: float, source_height: float, target_size: float = 54.0) -> void:
+func _apply_animated_scale_from_dimensions(source_width: float, source_height: float, target_size: float = 68.0) -> void:
     var max_side: float = maxf(1.0, maxf(source_width, source_height))
     var fit_scale: float = (target_size * body_size) / max_side
     animated_sprite.scale = Vector2.ONE * fit_scale
     animated_sprite.visible = true
     sprite.visible = false
     use_animated_sprite = true
+
+
+func _fit_existing_sprite_frames() -> void:
+    if animated_sprite == null or animated_sprite.sprite_frames == null:
+        return
+    var names := animated_sprite.sprite_frames.get_animation_names()
+    if names.is_empty():
+        animated_sprite.scale = _scene_visual_scale * body_size / maxf(0.01, visual_body_size)
+        return
+    var anim_name := String(names[0])
+    if animated_sprite.sprite_frames.has_animation("idle_right"):
+        anim_name = "idle_right"
+    elif animated_sprite.sprite_frames.has_animation("idle_side"):
+        anim_name = "idle_side"
+    if animated_sprite.sprite_frames.get_frame_count(anim_name) < 1:
+        return
+    # A cena-base nao pode impor idle_side a spritesheets novas.
+    if not animated_sprite.sprite_frames.has_animation(String(animated_sprite.animation)):
+        animated_sprite.animation = anim_name
+    var frame_tex := animated_sprite.sprite_frames.get_frame_texture(anim_name, 0)
+    if frame_tex == null:
+        animated_sprite.scale = _scene_visual_scale * body_size / maxf(0.01, visual_body_size)
+        return
+    _apply_animated_scale_from_dimensions(float(frame_tex.get_width()), float(frame_tex.get_height()), 80.0 * visual_body_size)
 
 func _load_local_creature_frames() -> bool:
     var dir := "res://assets/sprites/creatures/frames/%s" % species_id
@@ -204,10 +245,10 @@ func _load_local_creature_frames() -> bool:
             paths.append(frame_path)
     if paths.is_empty():
         return false
-    animated_sprite.sprite_frames = SpriteAnimUtils.create_file_frames(paths)
+    animated_sprite.sprite_frames = AnimacaoSprite.create_file_frames(paths)
     animated_mode = "side2"
     var first_tex := load(paths[0]) as Texture2D
-    _apply_animated_scale_from_dimensions(float(first_tex.get_width()), float(first_tex.get_height()), 56.0)
+    _apply_animated_scale_from_dimensions(float(first_tex.get_width()), float(first_tex.get_height()), 68.0)
     animated_sprite.play("walk_side")
     return true
 
@@ -221,19 +262,20 @@ func _load_mapped_pack_sprite() -> bool:
     var tex := load(path) as Texture2D
     var kind := String(config.get("kind", "grid4"))
     if kind == "grid4":
-        animated_sprite.sprite_frames = SpriteAnimUtils.create_grid4_frames(tex)
+        animated_sprite.sprite_frames = AnimacaoSprite.create_grid4_frames(tex)
         animated_mode = "grid4"
-        _apply_animated_scale_from_dimensions(16.0, 16.0, 54.0 * float(config.get("scale", 1.0)))
+        _apply_animated_scale_from_dimensions(16.0, 16.0, 68.0 * float(config.get("scale", 1.0)))
     else:
-        animated_sprite.sprite_frames = SpriteAnimUtils.create_side_frames(tex)
+        animated_sprite.sprite_frames = AnimacaoSprite.create_side_frames(tex)
         animated_mode = "side2"
-        var frame_count: int = max(1, int(tex.get_width() / 16))
-        _apply_animated_scale_from_dimensions(float(tex.get_width()) / float(frame_count), float(tex.get_height()), 54.0 * float(config.get("scale", 1.0)))
+        var frame_count: int = max(1, floori(float(tex.get_width()) / 16.0))
+        _apply_animated_scale_from_dimensions(float(tex.get_width()) / float(frame_count), float(tex.get_height()), 68.0 * float(config.get("scale", 1.0)))
     var first_anim := "idle_right" if animated_mode == "grid4" else "idle_side"
     animated_sprite.play(first_anim)
     return true
 
 func _physics_process(delta: float) -> void:
+    rotation = 0.0
     attack_timer = maxf(0.0, attack_timer - delta)
     companion_attack_timer = maxf(0.0, companion_attack_timer - delta)
     hostile_to_player = maxf(0.0, hostile_to_player - delta)
@@ -269,6 +311,11 @@ func _physics_process(delta: float) -> void:
             if dash_damage_ready and global_position.distance_to(player.global_position) <= _attack_range() + 16.0:
                 player.take_damage(contact_damage * 1.18)
                 dash_damage_ready = false
+                # Encerra o mergulho no impacto e cria uma pequena separacao.
+                # Isso impede o inimigo de continuar pressionando o collider
+                # do player ate o fim do dash.
+                dash_attack_left = 0.0
+                velocity = player.global_position.direction_to(global_position) * move_speed * 0.55
         elif befriended:
             _update_companion(delta)
         else:
@@ -310,7 +357,16 @@ func _update_enemy_animation() -> void:
             animated_sprite.flip_h = false
         elif velocity.x < -4.0:
             animated_sprite.flip_h = true
-    if animated_sprite.sprite_frames.has_animation(anim) and animated_sprite.animation != anim:
+    # Novas folhas podem ter nomes de direcao diferentes das antigas.
+    # Nunca solicita uma animacao inexistente ao recurso SpriteFrames.
+    if not animated_sprite.sprite_frames.has_animation(anim):
+        if animated_sprite.sprite_frames.has_animation("idle_right"):
+            anim = "idle_right"
+        elif animated_sprite.sprite_frames.has_animation("idle_side"):
+            anim = "idle_side"
+        else:
+            return
+    if animated_sprite.animation != anim or not animated_sprite.is_playing():
         animated_sprite.play(anim)
 
 func _update_ecosystem(_delta: float) -> void:
@@ -403,6 +459,22 @@ func _update_ecosystem(_delta: float) -> void:
 
     var separation := _separation_vector(48.0 + body_size * 12.0)
     desired = (desired + separation * 0.72).normalized() if desired.length() > 0.05 else separation
+
+    # Nao deixa uma criatura hostil tentar ocupar o mesmo ponto do player.
+    # Ela para no alcance de ataque e, se por algum motivo ja estiver muito
+    # perto, se afasta levemente. Isso elimina o efeito de inimigo "grudado".
+    var toward_player := global_position.direction_to(player.global_position)
+    var is_player_hostile := hostile_to_player > 0.0 or temperament in ["predator", "territorial"]
+    var personal_space := _player_personal_space_range()
+    if is_player_hostile and player_distance <= personal_space and desired.dot(toward_player) > 0.20:
+        if player_distance < personal_space * 0.72:
+            desired = -toward_player
+            speed_scale = minf(speed_scale, 0.72)
+        elif separation.length() > 0.05:
+            desired = separation
+        else:
+            desired = Vector2.ZERO
+
     if mechanic == "zigzag" and desired.length() > 0.05:
         desired = desired.rotated(sin(steering_phase * 2.1) * 0.58)
         speed_scale *= 1.12
@@ -556,6 +628,11 @@ func _nearest_hostile(max_distance: float) -> Node2D:
 
 func _attack_range() -> float:
     return 28.0 + 18.0 * body_size
+
+func _player_personal_space_range() -> float:
+    # Um pouco maior que o alcance fisico dos colliders e proximo do alcance
+    # normal de ataque, para o inimigo atacar sem empurrar/colar no jogador.
+    return maxf(_attack_range() - 2.0, 38.0 + 12.0 * body_size)
 
 func _try_attack_player(distance: float) -> void:
     if distance <= _attack_range() and attack_timer <= 0.0 and attack_windup <= 0.0:
@@ -750,7 +827,7 @@ func _draw_health_bar(radius: float) -> void:
     var pos := Vector2(-width * 0.5, -radius - 16.0)
     draw_rect(Rect2(pos, Vector2(width, 5.0)), Color(0.04, 0.04, 0.04, 0.85), true)
     draw_rect(Rect2(pos + Vector2(1,1), Vector2((width - 2.0) * health.ratio(), 3.0)), Color("#d65a50") if not befriended else Color("#66c88a"), true)
-    draw_rect(Rect2(pos, Vector2(width, 5.0)), Color("#ead6a8", 0.9), false, 1.0)
+    draw_rect(Rect2(pos, Vector2(width, 5.0)), Color(Color("#ead6a8"), 0.9), false, 1.0)
 
 func _draw_attack_telegraph(radius: float) -> void:
     if attack_windup <= 0.0 or not is_instance_valid(attack_target):

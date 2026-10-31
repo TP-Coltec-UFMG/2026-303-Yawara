@@ -1,0 +1,17 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/mapinguari/r1c0.png" id="tex0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/mapinguari/r1c1.png" id="tex1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/mapinguari/r1c2.png" id="tex2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/mapinguari/r1c3.png" id="tex3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/mapinguari/r3c0.png" id="tex4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/mapinguari/r3c1.png" id="tex5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/mapinguari/r3c2.png" id="tex6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters_v2/mapinguari/r0c0.png" id="tex7"]
+
+[resource]
+animations = [
+{"name": &"walk", "speed": 7.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex0")}, {"duration": 1.0, "texture": ExtResource("tex1")}, {"duration": 1.0, "texture": ExtResource("tex2")}, {"duration": 1.0, "texture": ExtResource("tex3")}]},
+{"name": &"attack", "speed": 9.0, "loop": false, "frames": [{"duration": 1.0, "texture": ExtResource("tex4")}, {"duration": 1.0, "texture": ExtResource("tex5")}, {"duration": 1.0, "texture": ExtResource("tex6")}]},
+{"name": &"idle", "speed": 4.0, "loop": true, "frames": [{"duration": 1.0, "texture": ExtResource("tex7")}]}
+]

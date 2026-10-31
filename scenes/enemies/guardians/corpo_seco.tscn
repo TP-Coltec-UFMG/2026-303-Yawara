@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="PackedScene" path="res://scenes/enemies/miniboss.tscn" id="1"]
+[ext_resource type="SpriteFrames" path="res://assets/animations/corpo_seco.tres" id="2"]
+[node name="corpo_seco" instance=ExtResource("1")]
+boss_id = "corpo_seco"
+biome_index = 0
+[node name="Sprite2D" parent="." index="0"]
+visible = false
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 4
+position = Vector2(0, -9)
+scale = Vector2(0.88, 0.88)
+sprite_frames = ExtResource("2")
+animation = &"walk"
+autoplay = "walk"

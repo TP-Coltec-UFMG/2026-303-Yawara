@@ -12,7 +12,18 @@ var world_seed := 0
 var lakes: Array[Dictionary] = []
 var decoration_points: Array[Dictionary] = []
 var rng := RandomNumberGenerator.new()
+# Details enviados pelo usuario; arquivos otimizados para desempenho e bioma.
+const DETAIL_FOLDERS := ["forest", "sertao", "pantanal", "geada"]
+const DETAIL_FILES := [
+    ["forest_leaf_01.png", "forest_leaf_02.png", "forest_fern_01.png", "forest_branch_01.png", "forest_bush_01.png", "forest_moss_rock_01.png"],
+    ["sertao_dry_grass_01.png", "sertao_crack_01.png", "sertao_branch_01.png", "sertao_pebble_01.png", "sertao_bush_01.png", "sertao_cactus_01.png"],
+    ["pantanal_wet_grass_01.png", "pantanal_mud_01.png", "pantanal_reed_01.png", "pantanal_puddle_01.png", "pantanal_flower_01.png"],
+    ["geada_frost_01.png", "geada_grass_01.png", "geada_flower_01.png", "geada_twig_01.png", "geada_rock_01.png", "geada_bush_01.png"]
+]
 var ground_texture: Texture2D
+var ground_grain_texture: Texture2D
+var detail_textures: Array[Texture2D] = []
+var ground_details: Array[Dictionary] = []
 
 func setup(coord: Vector2i, biome: int, seed_value: int) -> void:
     texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
@@ -22,6 +33,8 @@ func setup(coord: Vector2i, biome: int, seed_value: int) -> void:
     position = Vector2(float(coord.x) * CHUNK_SIZE, float(coord.y) * CHUNK_SIZE)
     rng.seed = _mix_seed(coord, seed_value)
     _try_load_ground_texture()
+    _try_load_ground_grain()
+    _load_detail_textures()
     _generate_layout()
     queue_redraw()
 
@@ -36,6 +49,24 @@ func _try_load_ground_texture() -> void:
     if ResourceLoader.exists(path):
         ground_texture = load(path) as Texture2D
 
+# Camada de microtextura pixel art quase transparente, por bioma.
+# Acrescenta riqueza ao solo sem criar objetos nem afetar colisao.
+func _try_load_ground_grain() -> void:
+    var grain_files := ["forest_grain.png", "sertao_grain.png", "pantanal_grain.png", "geada_grain.png"]
+    var grain_path: String = "res://assets/sprites/regions/soil_details/%s" % grain_files[biome_index]
+    ground_grain_texture = null
+    if ResourceLoader.exists(grain_path):
+        ground_grain_texture = load(grain_path) as Texture2D
+
+func _load_detail_textures() -> void:
+    detail_textures.clear()
+    for file_name in DETAIL_FILES[biome_index]:
+        var texture_path: String = "res://assets/sprites/ground_details/%s/%s" % [DETAIL_FOLDERS[biome_index], file_name]
+        if ResourceLoader.exists(texture_path):
+            var tex := load(texture_path) as Texture2D
+            if tex != null:
+                detail_textures.append(tex)
+
 func _mix_seed(coord: Vector2i, seed_value: int) -> int:
     var mixed := seed_value
     mixed ^= coord.x * 73856093
@@ -44,6 +75,9 @@ func _mix_seed(coord: Vector2i, seed_value: int) -> int:
     return abs(mixed)
 
 func _generate_layout() -> void:
+    lakes.clear()
+    decoration_points.clear()
+    ground_details.clear()
     var data: Dictionary = BiomeDB.get_biome(biome_index)
 
     # Lagos / brejos. O jogador pode atravessar, mas sofre penalidade de terreno.
@@ -51,29 +85,51 @@ func _generate_layout() -> void:
         var lake_count := 1 if rng.randf() < 0.82 else 2
         for _i in range(lake_count):
             lakes.append({
-                "center": Vector2(rng.randf_range(180.0, CHUNK_SIZE - 180.0), rng.randf_range(160.0, CHUNK_SIZE - 160.0)),
-                "radius": rng.randf_range(85.0, 175.0)
+                "center": Vector2(rng.randf_range(215.0, CHUNK_SIZE - 215.0), rng.randf_range(215.0, CHUNK_SIZE - 215.0)),
+                "radius": rng.randf_range(85.0, 162.0)
             })
 
     # Decoração puramente visual: grama, folhas, pedras pequenas etc.
-    for _i in range(rng.randi_range(24, 38)):
+    for _i in range(0):
         decoration_points.append({
             "pos": Vector2(rng.randf_range(22.0, CHUNK_SIZE - 22.0), rng.randf_range(22.0, CHUNK_SIZE - 22.0)),
             "size": rng.randf_range(2.0, 7.0),
             "variant": rng.randi_range(0, 3)
         })
 
+    # Decoração do terreno, sem colisão nem nós extras: leves, determinísticas
+    # por semente e desenhadas abaixo dos objetos/animais.
+    if not detail_textures.is_empty():
+        for _detail_index in range(rng.randi_range(3, 5)):
+            var p := Vector2(rng.randf_range(24.0, CHUNK_SIZE - 24.0), rng.randf_range(24.0, CHUNK_SIZE - 24.0))
+            if is_local_point_in_water(p) or (position + p).distance_to(Vector2(480, 480)) < 135.0:
+                continue
+            var too_close := false
+            for existing in ground_details:
+                if p.distance_to(existing["position"]) < 180.0:
+                    too_close = true
+                    break
+            if too_close:
+                continue
+            var variant := rng.randi_range(0, detail_textures.size() - 1)
+            # Grama/folhas/decalques mais comuns, props maiores mais raros.
+            if rng.randf() < 0.70:
+                variant = rng.randi_range(0, mini(2, detail_textures.size() - 1))
+            ground_details.append({
+                "position": p,
+                "variant": variant,
+                "scale": rng.randf_range(0.48, 0.66),
+                "opacity": rng.randf_range(0.74, 0.87)
+            })
+
     # Árvores e rochas com colisão. Evitamos o interior dos lagos.
-    var tree_count := rng.randi_range(7, 13)
-    var rock_count := rng.randi_range(3, 7)
-    if biome_index == 1:
-        tree_count = rng.randi_range(5, 9)
-    elif biome_index == 0 or biome_index == 3:
-        tree_count += 3
+    var tree_count := rng.randi_range(0, 1)
+    var rock_count := rng.randi_range(0, 1)
+    # Variacao natural sem lotar a camera aproximada.
 
     for i in range(tree_count):
         var p := _random_land_point(20)
-        if p.x < 0.0:
+        if p.x < 0.0 or (position + p).distance_to(Vector2(480, 480)) < 110.0:
             continue
         var prop := PROP_SCENE.instantiate() as WorldProp
         prop.position = p
@@ -82,7 +138,7 @@ func _generate_layout() -> void:
 
     for i in range(rock_count):
         var p := _random_land_point(20)
-        if p.x < 0.0:
+        if p.x < 0.0 or (position + p).distance_to(Vector2(480, 480)) < 110.0:
             continue
         var rock := PROP_SCENE.instantiate() as WorldProp
         rock.position = p
@@ -90,10 +146,10 @@ func _generate_layout() -> void:
         rock.configure("rock", biome_index, int(rng.randi()) + i)
 
     # Frutas também existem naturalmente no chão: build vegana não precisa bater em árvore.
-    var ground_fruit := rng.randi_range(3, 6)
+    var ground_fruit := rng.randi_range(1, 3)
     for _i in range(ground_fruit):
         var p := _random_land_point(12)
-        if p.x < 0.0:
+        if p.x < 0.0 or (position + p).distance_to(Vector2(480, 480)) < 110.0:
             continue
         var fruit := FRUIT_SCENE.instantiate() as FruitPickup
         fruit.position = p
@@ -112,7 +168,11 @@ func _generate_layout() -> void:
     if rng.randf() < poi_chance:
         var types := BiomeDB.POIS.keys()
         var encounter := ENCOUNTER_SCENE.instantiate() as EncounterPoint
-        encounter.position = _random_land_point(30)
+        var encounter_pos := _random_land_point(30)
+        if encounter_pos.x < 0.0:
+            encounter.queue_free()
+            return
+        encounter.position = encounter_pos
         add_child(encounter)
         encounter.configure(biome_index, String(types[rng.randi_range(0, types.size() - 1)]), int(rng.randi()))
 
@@ -132,71 +192,107 @@ func is_local_point_in_water(local_point: Vector2) -> bool:
             return true
     return false
 
+# Os tons do terreno e as margens usam formas orgânicas, nunca um grid visível.
 func _draw() -> void:
     var data: Dictionary = BiomeDB.get_biome(biome_index)
     var ground: Color = data["ground"]
-    var accent: Color = data["accent"]
-    var detail: Color = data["detail"]
     if ground_texture != null:
         draw_texture_rect(ground_texture, Rect2(0.0, 0.0, CHUNK_SIZE + 2.0, CHUNK_SIZE + 2.0), true)
     else:
         draw_rect(Rect2(0.0, 0.0, CHUNK_SIZE + 2.0, CHUNK_SIZE + 2.0), ground)
 
-    for decoration in decoration_points:
-        var p: Vector2 = decoration["pos"]
-        var s := float(decoration["size"])
-        var variant := int(decoration["variant"])
-        if variant == 0:
-            draw_line(p - Vector2(0, s), p + Vector2(s * 0.45, s), Color(accent, 0.6), 2.0)
-        elif variant == 1:
-            draw_circle(p, s, Color(detail, 0.18))
-        elif variant == 2:
-            draw_line(p - Vector2(s, 0), p + Vector2(s, 0), Color(detail, 0.28), 2.0)
-        else:
-            draw_circle(p, maxf(1.0, s * 0.45), Color(accent.lightened(0.15), 0.40))
+    # A textura base já incorpora folhas, veios e variações tonais.
+    # A antiga sobreposição de ruído foi removida para não poluir o piso.
+    _draw_biome_transitions(ground)
 
-    # Camadas extras para cada bioma, inspiradas nos packs e na folha de bases.
-    if biome_index == 0:
-        for i in range(10):
-            var leaf := Vector2(70.0 + float(i) * 82.0 + sin(float(i) + float(chunk_coord.y)) * 18.0, 80.0 + fmod(float(i * 67), CHUNK_SIZE - 120.0))
-            draw_circle(leaf, 20.0, Color(accent.lightened(0.12), 0.10))
-            draw_line(leaf + Vector2(-18, 0), leaf + Vector2(18, 6), Color(detail, 0.16), 2.0)
-    elif biome_index == 1:
-        for i in range(9):
-            var y := 70.0 + float(i) * 95.0
-            draw_polyline(PackedVector2Array([Vector2(48, y), Vector2(240, y + 18), Vector2(420, y - 12), Vector2(620, y + 10), Vector2(840, y - 16)]), Color(detail, 0.11), 2.0)
-        for i in range(6):
-            var stone := Vector2(110.0 + float(i) * 145.0 + float((chunk_coord.x + chunk_coord.y) % 9) * 4.0, 120.0 + fmod(float(i * 143), CHUNK_SIZE - 180.0))
-            draw_circle(stone, 12.0, Color(ground.darkened(0.14), 0.18))
-    elif biome_index == 2:
-        for i in range(14):
-            var reed := Vector2(60.0 + float(i) * 60.0, 75.0 + fmod(float(i * 47), CHUNK_SIZE - 100.0))
-            draw_line(reed, reed + Vector2(0, 10 + (i % 3) * 8), Color(accent.lightened(0.15), 0.30), 2.0)
-            draw_line(reed + Vector2(0, 2), reed + Vector2(-5, 9), Color(detail, 0.20), 1.0)
-            draw_line(reed + Vector2(0, 4), reed + Vector2(5, 12), Color(detail, 0.20), 1.0)
-        for i in range(5):
-            var mud := Vector2(130.0 + float(i) * 170.0, 140.0 + fmod(float(i * 131), CHUNK_SIZE - 220.0))
-            draw_circle(mud, 28.0, Color(ground.darkened(0.10), 0.18))
-    elif biome_index == 3:
-        for i in range(26):
-            var spark := Vector2(40.0 + fmod(float(i * 73), CHUNK_SIZE - 80.0), 38.0 + fmod(float(i * 101), CHUNK_SIZE - 76.0))
-            draw_circle(spark, 2.0 + float(i % 2), Color(detail.lightened(0.12), 0.45))
-        for i in range(8):
-            var grass := Vector2(88.0 + float(i) * 102.0, 120.0 + fmod(float(i * 117), CHUNK_SIZE - 180.0))
-            draw_line(grass, grass + Vector2(-6, 12), Color(accent, 0.18), 2.0)
-            draw_line(grass, grass + Vector2(0, 16), Color(detail, 0.15), 2.0)
-            draw_line(grass, grass + Vector2(6, 11), Color(accent.lightened(0.05), 0.18), 2.0)
+    for placed in ground_details:
+        var tex: Texture2D = detail_textures[int(placed["variant"])]
+        var draw_size: Vector2 = tex.get_size() * float(placed["scale"])
+        var center: Vector2 = placed["position"]
+        draw_texture_rect(tex, Rect2(center - draw_size * 0.5, draw_size), false, Color(1.0, 1.0, 1.0, float(placed["opacity"])))
 
     for lake in lakes:
-        var center: Vector2 = lake["center"]
-        var radius := float(lake["radius"])
-        draw_circle(center, radius, Color("#245c70"))
-        draw_circle(center + Vector2(-radius * 0.18, -radius * 0.15), radius * 0.72, Color("#2f7184"))
-        draw_arc(center, radius, 0.0, TAU, 48, Color("#78a9a5"), 4.0)
-        for i in range(5):
-            var a := TAU * float(i) / 5.0 + float(chunk_coord.x + chunk_coord.y)
-            var lilypad := center + Vector2.from_angle(a) * radius * 0.55
-            draw_circle(lilypad, 7.0, Color("#4f8a55"))
+        _draw_lake(lake)
 
-    # Grade de chunk quase invisível, útil para perceber que o mapa continua sem fim.
-    draw_rect(Rect2(1, 1, CHUNK_SIZE - 2, CHUNK_SIZE - 2), Color(detail, 0.055), false, 2.0)
+
+func _lake_polygon(center: Vector2, radius: float, factor: float) -> PackedVector2Array:
+    var vertices := PackedVector2Array()
+    var phase := float(chunk_coord.x * 17 + chunk_coord.y * 31) * 0.31 + center.x * 0.017
+    for i in range(40):
+        var angle := TAU * float(i) / 40.0
+        var variation := 0.94 + sin(angle * 3.0 + phase) * 0.065 + sin(angle * 7.0 - phase * 1.5) * 0.034
+        var stretch := Vector2(1.14, 0.85)
+        vertices.append(center + Vector2.from_angle(angle) * radius * variation * factor * stretch)
+    return vertices
+
+
+func _draw_lake(lake: Dictionary) -> void:
+    var center: Vector2 = lake["center"]
+    var radius: float = float(lake["radius"])
+    # Em vez de três círculos concêntricos, desenhamos água irregular
+    # com margem úmida, profundidade e reflexos de céu.
+    var bank_palette := [Color("#6e915f"), Color("#a98d5e"), Color("#6b9a73"), Color("#9eb7b6")]
+    var mid_palette := [Color("#66b7a1"), Color("#6eb1a0"), Color("#62b4a9"), Color("#86b9c1")]
+    var deep_palette := [Color("#4b8f8a"), Color("#5a9690"), Color("#4e958f"), Color("#71a5ad")]
+    var bank: Color = bank_palette[biome_index]
+    var mid: Color = mid_palette[biome_index]
+    var deep: Color = deep_palette[biome_index]
+    draw_colored_polygon(_lake_polygon(center, radius, 1.10), Color(bank, 0.82))
+    draw_colored_polygon(_lake_polygon(center, radius, 1.035), mid)
+    draw_colored_polygon(_lake_polygon(center, radius, 0.97), deep)
+    draw_colored_polygon(_lake_polygon(center + Vector2(-5.0, 6.0), radius, 0.73), Color(mid, 0.42))
+    draw_colored_polygon(_lake_polygon(center + Vector2(-radius * 0.13, -radius * 0.14), radius, 0.43), Color("#d7f1e4", 0.17))
+
+    # Reflexos discretos e vegetação aquática, em estilo aconchegante e limpo.
+    for i in range(2):
+        var offset := Vector2(-radius * 0.24 + float(i) * radius * 0.28, -radius * 0.16 + float(i % 2) * 17.0)
+        var a := center + offset
+        draw_line(a, a + Vector2(radius * 0.17, -1.0), Color("#d8f2e8", 0.22), 2.0)
+        draw_line(a + Vector2(8.0, 5.0), a + Vector2(radius * 0.09, 5.0), Color("#e5f7ef", 0.15), 2.0)
+    if biome_index == 2 or biome_index == 0:
+        for i in range(2):
+            var angle := float(i) * 2.65 + center.x * 0.035
+            var p := center + Vector2(cos(angle) * radius * 0.62, sin(angle) * radius * 0.48)
+            draw_circle(p, 5.0, Color("#3d6f4f"))
+            draw_circle(p + Vector2(-1.0, -1.0), 3.0, Color("#8cc27b"))
+            draw_line(p, p + Vector2(5.0, -2.0), Color("#4d9e94"), 2.0)
+
+
+# Bordas com curvas suaves; cada chunk chega à mesma cor no encontro de biomas.
+func _draw_biome_transitions(ground_color: Color) -> void:
+    var world := get_parent() as ProceduralWorld
+    if world == null:
+        return
+    var fade_width := 150.0
+    var steps := 12
+    var directions := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
+    for side in range(4):
+        var other_index := world.biome_for_chunk(chunk_coord + directions[side])
+        if other_index == biome_index:
+            continue
+        var other_color: Color = BiomeDB.get_biome(other_index)["ground"]
+        var meeting_color := ground_color.lerp(other_color, 0.5)
+        for step in range(steps):
+            var t := float(step) / float(steps)
+            var strength := 0.60 * pow(1.0 - t, 1.5)
+            var inner := fade_width * float(step + 1) / float(steps)
+            var outer := fade_width * float(step) / float(steps)
+            var polygon := PackedVector2Array()
+            for j in range(25):
+                polygon.append(_edge_point(side, outer, float(j) / 24.0))
+            for j in range(24, -1, -1):
+                polygon.append(_edge_point(side, inner, float(j) / 24.0))
+            draw_colored_polygon(polygon, Color(meeting_color, strength))
+
+
+func _edge_point(side: int, distance: float, t: float) -> Vector2:
+    var along := t * CHUNK_SIZE
+    var wobble := sin(along * 0.013 + float(chunk_coord.x + chunk_coord.y)) * 13.0
+    wobble += sin(along * 0.041 + float(chunk_coord.x * 5 - chunk_coord.y * 3)) * 3.5
+    # A borda de fora é reta; a irregularidade aumenta para dentro do bioma.
+    var depth := maxf(0.0, distance + wobble * minf(distance / 48.0, 1.0))
+    match side:
+        0: return Vector2(depth, along)
+        1: return Vector2(CHUNK_SIZE - depth, along)
+        2: return Vector2(along, depth)
+        _: return Vector2(along, CHUNK_SIZE - depth)

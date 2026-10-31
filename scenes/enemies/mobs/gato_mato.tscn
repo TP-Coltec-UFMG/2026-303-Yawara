@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/enemy.tscn" id="1"]
+[ext_resource type="SpriteFrames" path="res://assets/animations/gato_mato.tres" id="2"]
+
+[sub_resource type="CircleShape2D" id="BodyShape"]
+radius = 9.92
+
+[node name="gato_mato" instance=ExtResource("1")]
+species_id = "gato_mato"
+animated_mode = "grid4"
+visual_body_size = 0.62
+
+[node name="AnimatedSprite2D" parent="." index="3"]
+scale = Vector2(0.11729729729729729, 0.11729729729729729)
+sprite_frames = ExtResource("2")
+animation = &"idle_right"
+autoplay = "idle_right"
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("BodyShape")

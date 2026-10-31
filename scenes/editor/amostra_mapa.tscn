@@ -1,0 +1,536 @@
+[gd_scene load_steps=11 format=3 uid="uid://dom3lkwm5jp4j"]
+
+[ext_resource type="Script" uid="uid://bufbxqjiuukmr" path="res://scripts/editor/editor_only.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ground_details/forest/forest_bush_01.png" id="t4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ground_details/sertao/sertao_bush_01.png" id="t5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ground_details/pantanal/pantanal_reed_01.png" id="t6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ground_details/geada/geada_bush_01.png" id="t7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ground_details/forest/forest_moss_rock_01.png" id="t8"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_dqx26"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_2eicy"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_l08mt"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_gsdyv"]
+
+[node name="AmostraDoMapa" type="Node2D"]
+script = ExtResource("script")
+
+[node name="Floresta" type="Node2D" parent="."]
+
+[node name="Terreno" type="Polygon2D" parent="Floresta"]
+z_index = -10
+texture_repeat = 2
+color = Color(0.2627451, 0.70980394, 0.23529412, 1)
+texture = SubResource("CanvasTexture_dqx26")
+polygon = PackedVector2Array(0, 0, 960, 0, 960, 960, 0, 960)
+uv = PackedVector2Array(0, 0, 960, 0, 960, 960, 0, 960)
+
+[node name="Lago" type="Polygon2D" parent="Floresta"]
+z_index = -9
+color = Color(0.1, 0.35, 0.4, 0.9)
+polygon = PackedVector2Array(820, 270, 818.025, 287.365, 812.16, 304.202, 802.583, 320, 789.586, 334.279, 773.562, 346.604, 755, 356.603, 734.463, 363.969, 712.574, 368.481, 690, 370, 667.426, 368.481, 645.537, 363.969, 625, 356.603, 606.438, 346.604, 590.414, 334.279, 577.417, 320, 567.84, 304.202, 561.975, 287.365, 560, 270, 561.975, 252.635, 567.84, 235.798, 577.417, 220, 590.414, 205.721, 606.438, 193.396, 625, 183.397, 645.537, 176.031, 667.426, 171.519, 690, 170, 712.574, 171.519, 734.463, 176.031, 755, 183.397, 773.562, 193.396, 789.586, 205.721, 802.583, 220, 812.16, 235.798, 818.025, 252.635)
+
+[node name="Decoracao0" type="Sprite2D" parent="Floresta"]
+position = Vector2(604, 494)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao1" type="Sprite2D" parent="Floresta"]
+position = Vector2(896, 380)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao2" type="Sprite2D" parent="Floresta"]
+position = Vector2(444, 366)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao3" type="Sprite2D" parent="Floresta"]
+position = Vector2(248, 854)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao4" type="Sprite2D" parent="Floresta"]
+position = Vector2(792, 791)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao5" type="Sprite2D" parent="Floresta"]
+position = Vector2(623, 747)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao6" type="Sprite2D" parent="Floresta"]
+position = Vector2(354, 182)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao7" type="Sprite2D" parent="Floresta"]
+position = Vector2(97, 324)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao8" type="Sprite2D" parent="Floresta"]
+position = Vector2(463, 834)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao9" type="Sprite2D" parent="Floresta"]
+position = Vector2(499, 328)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao10" type="Sprite2D" parent="Floresta"]
+position = Vector2(583, 891)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao11" type="Sprite2D" parent="Floresta"]
+position = Vector2(395, 725)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao12" type="Sprite2D" parent="Floresta"]
+position = Vector2(770, 811)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao13" type="Sprite2D" parent="Floresta"]
+position = Vector2(481, 210)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao15" type="Sprite2D" parent="Floresta"]
+position = Vector2(213, 880)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao16" type="Sprite2D" parent="Floresta"]
+position = Vector2(271, 224)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao17" type="Sprite2D" parent="Floresta"]
+position = Vector2(792, 615)
+scale = Vector2(1.6521739, 1.6521739)
+texture = ExtResource("t4")
+
+[node name="Decoracao18" type="Sprite2D" parent="Floresta"]
+position = Vector2(642, 891)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao20" type="Sprite2D" parent="Floresta"]
+position = Vector2(408, 622)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao21" type="Sprite2D" parent="Floresta"]
+position = Vector2(196, 802)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Nome" type="Label" parent="Floresta"]
+offset_left = 30.0
+offset_top = 25.0
+theme_override_font_sizes/font_size = 24
+text = "FLORESTA — AMOSTRA NO EDITOR"
+
+[node name="Caatinga" type="Node2D" parent="."]
+position = Vector2(960, 0)
+
+[node name="Terreno" type="Polygon2D" parent="Caatinga"]
+z_index = -10
+texture_repeat = 2
+color = Color(0.8117647, 0.5882353, 0.24313726, 1)
+texture = SubResource("CanvasTexture_2eicy")
+polygon = PackedVector2Array(0, 0, 960, 0, 960, 960, 0, 960)
+uv = PackedVector2Array(0, 0, 960, 0, 960, 960, 0, 960)
+
+[node name="Decoracao0" type="Sprite2D" parent="Caatinga"]
+position = Vector2(255, 195)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao1" type="Sprite2D" parent="Caatinga"]
+position = Vector2(747, 529)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao2" type="Sprite2D" parent="Caatinga"]
+position = Vector2(412, 315)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao3" type="Sprite2D" parent="Caatinga"]
+position = Vector2(272, 571)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao4" type="Sprite2D" parent="Caatinga"]
+position = Vector2(713, 575)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao5" type="Sprite2D" parent="Caatinga"]
+position = Vector2(257, 561)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao6" type="Sprite2D" parent="Caatinga"]
+position = Vector2(372, 539)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao7" type="Sprite2D" parent="Caatinga"]
+position = Vector2(340, 270)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao8" type="Sprite2D" parent="Caatinga"]
+position = Vector2(329, 778)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao9" type="Sprite2D" parent="Caatinga"]
+position = Vector2(190, 402)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao10" type="Sprite2D" parent="Caatinga"]
+position = Vector2(604, 761)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao11" type="Sprite2D" parent="Caatinga"]
+position = Vector2(850, 876)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao12" type="Sprite2D" parent="Caatinga"]
+position = Vector2(248, 310)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao13" type="Sprite2D" parent="Caatinga"]
+position = Vector2(243, 313)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao14" type="Sprite2D" parent="Caatinga"]
+position = Vector2(275, 822)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao15" type="Sprite2D" parent="Caatinga"]
+position = Vector2(444, 659)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao17" type="Sprite2D" parent="Caatinga"]
+position = Vector2(899, 763)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t5")
+
+[node name="Decoracao18" type="Sprite2D" parent="Caatinga"]
+position = Vector2(844, 575)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao19" type="Sprite2D" parent="Caatinga"]
+position = Vector2(291, 803)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao20" type="Sprite2D" parent="Caatinga"]
+position = Vector2(376, 341)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao21" type="Sprite2D" parent="Caatinga"]
+position = Vector2(76, 420)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao22" type="Sprite2D" parent="Caatinga"]
+position = Vector2(485, 295)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao23" type="Sprite2D" parent="Caatinga"]
+position = Vector2(860, 814)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Nome" type="Label" parent="Caatinga"]
+offset_left = 30.0
+offset_top = 25.0
+theme_override_font_sizes/font_size = 24
+text = "CAATINGA — AMOSTRA NO EDITOR"
+
+[node name="Pantanal" type="Node2D" parent="."]
+position = Vector2(0, 960)
+
+[node name="Terreno" type="Polygon2D" parent="Pantanal"]
+z_index = -10
+texture_repeat = 2
+color = Color(0.1764706, 0.43137255, 0.22352941, 1)
+texture = SubResource("CanvasTexture_l08mt")
+polygon = PackedVector2Array(0, 0, 960, 0, 960, 960, 0, 960)
+uv = PackedVector2Array(0, 0, 960, 0, 960, 960, 0, 960)
+
+[node name="Lago" type="Polygon2D" parent="Pantanal"]
+z_index = -9
+color = Color(0.1, 0.35, 0.4, 0.9)
+polygon = PackedVector2Array(820, 270, 818.025, 287.365, 812.16, 304.202, 802.583, 320, 789.586, 334.279, 773.562, 346.604, 755, 356.603, 734.463, 363.969, 712.574, 368.481, 690, 370, 667.426, 368.481, 645.537, 363.969, 625, 356.603, 606.438, 346.604, 590.414, 334.279, 577.417, 320, 567.84, 304.202, 561.975, 287.365, 560, 270, 561.975, 252.635, 567.84, 235.798, 577.417, 220, 590.414, 205.721, 606.438, 193.396, 625, 183.397, 645.537, 176.031, 667.426, 171.519, 690, 170, 712.574, 171.519, 734.463, 176.031, 755, 183.397, 773.562, 193.396, 789.586, 205.721, 802.583, 220, 812.16, 235.798, 818.025, 252.635)
+
+[node name="Decoracao0" type="Sprite2D" parent="Pantanal"]
+position = Vector2(763, 114)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao1" type="Sprite2D" parent="Pantanal"]
+position = Vector2(873, 602)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao2" type="Sprite2D" parent="Pantanal"]
+position = Vector2(193, 593)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao3" type="Sprite2D" parent="Pantanal"]
+position = Vector2(274, 472)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao4" type="Sprite2D" parent="Pantanal"]
+position = Vector2(425, 611)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao5" type="Sprite2D" parent="Pantanal"]
+position = Vector2(366, 668)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao6" type="Sprite2D" parent="Pantanal"]
+position = Vector2(221, 679)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao7" type="Sprite2D" parent="Pantanal"]
+position = Vector2(337, 180)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao8" type="Sprite2D" parent="Pantanal"]
+position = Vector2(336, 491)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao9" type="Sprite2D" parent="Pantanal"]
+position = Vector2(405, 344)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao10" type="Sprite2D" parent="Pantanal"]
+position = Vector2(180, 861)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao11" type="Sprite2D" parent="Pantanal"]
+position = Vector2(403, 388)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao12" type="Sprite2D" parent="Pantanal"]
+position = Vector2(93, 652)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao14" type="Sprite2D" parent="Pantanal"]
+position = Vector2(142, 277)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao15" type="Sprite2D" parent="Pantanal"]
+position = Vector2(186, 625)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao17" type="Sprite2D" parent="Pantanal"]
+position = Vector2(821, 145)
+scale = Vector2(1.6170213, 1.6170213)
+texture = ExtResource("t6")
+
+[node name="Decoracao18" type="Sprite2D" parent="Pantanal"]
+position = Vector2(892, 170)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao19" type="Sprite2D" parent="Pantanal"]
+position = Vector2(494, 87)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao20" type="Sprite2D" parent="Pantanal"]
+position = Vector2(171, 662)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao21" type="Sprite2D" parent="Pantanal"]
+position = Vector2(815, 503)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao22" type="Sprite2D" parent="Pantanal"]
+position = Vector2(843, 475)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao23" type="Sprite2D" parent="Pantanal"]
+position = Vector2(520, 744)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Nome" type="Label" parent="Pantanal"]
+offset_left = 30.0
+offset_top = 25.0
+theme_override_font_sizes/font_size = 24
+text = "PANTANAL — AMOSTRA NO EDITOR"
+
+[node name="Geada" type="Node2D" parent="."]
+position = Vector2(960, 960)
+
+[node name="Terreno" type="Polygon2D" parent="Geada"]
+z_index = -10
+texture_repeat = 2
+color = Color(0.49803922, 0.34509805, 0.16078432, 1)
+texture = SubResource("CanvasTexture_gsdyv")
+polygon = PackedVector2Array(0, 0, 960, 0, 960, 960, 0, 960)
+uv = PackedVector2Array(0, 0, 960, 0, 960, 960, 0, 960)
+
+[node name="Lago" type="Polygon2D" parent="Geada"]
+z_index = -9
+color = Color(0.1, 0.35, 0.4, 0.9)
+polygon = PackedVector2Array(820, 270, 818.025, 287.365, 812.16, 304.202, 802.583, 320, 789.586, 334.279, 773.562, 346.604, 755, 356.603, 734.463, 363.969, 712.574, 368.481, 690, 370, 667.426, 368.481, 645.537, 363.969, 625, 356.603, 606.438, 346.604, 590.414, 334.279, 577.417, 320, 567.84, 304.202, 561.975, 287.365, 560, 270, 561.975, 252.635, 567.84, 235.798, 577.417, 220, 590.414, 205.721, 606.438, 193.396, 625, 183.397, 645.537, 176.031, 667.426, 171.519, 690, 170, 712.574, 171.519, 734.463, 176.031, 755, 183.397, 773.562, 193.396, 789.586, 205.721, 802.583, 220, 812.16, 235.798, 818.025, 252.635)
+
+[node name="Decoracao0" type="Sprite2D" parent="Geada"]
+position = Vector2(810, 772)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao1" type="Sprite2D" parent="Geada"]
+position = Vector2(875, 854)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao2" type="Sprite2D" parent="Geada"]
+position = Vector2(224, 336)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao3" type="Sprite2D" parent="Geada"]
+position = Vector2(760, 720)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao4" type="Sprite2D" parent="Geada"]
+position = Vector2(173, 405)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao6" type="Sprite2D" parent="Geada"]
+position = Vector2(97, 491)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao7" type="Sprite2D" parent="Geada"]
+position = Vector2(486, 146)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao8" type="Sprite2D" parent="Geada"]
+position = Vector2(175, 198)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao9" type="Sprite2D" parent="Geada"]
+position = Vector2(396, 555)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao10" type="Sprite2D" parent="Geada"]
+position = Vector2(664, 530)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao11" type="Sprite2D" parent="Geada"]
+position = Vector2(491, 283)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao12" type="Sprite2D" parent="Geada"]
+position = Vector2(274, 394)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao13" type="Sprite2D" parent="Geada"]
+position = Vector2(710, 767)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao15" type="Sprite2D" parent="Geada"]
+position = Vector2(507, 164)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao16" type="Sprite2D" parent="Geada"]
+position = Vector2(712, 600)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao17" type="Sprite2D" parent="Geada"]
+position = Vector2(894, 573)
+scale = Vector2(1.5833334, 1.5833334)
+texture = ExtResource("t7")
+
+[node name="Decoracao18" type="Sprite2D" parent="Geada"]
+position = Vector2(484, 153)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao19" type="Sprite2D" parent="Geada"]
+position = Vector2(281, 656)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao20" type="Sprite2D" parent="Geada"]
+position = Vector2(318, 105)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao21" type="Sprite2D" parent="Geada"]
+position = Vector2(276, 166)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao22" type="Sprite2D" parent="Geada"]
+position = Vector2(155, 264)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Decoracao23" type="Sprite2D" parent="Geada"]
+position = Vector2(329, 780)
+scale = Vector2(3, 3)
+texture = ExtResource("t8")
+
+[node name="Nome" type="Label" parent="Geada"]
+offset_left = 30.0
+offset_top = 25.0
+theme_override_font_sizes/font_size = 24
+text = "GEADA — AMOSTRA NO EDITOR"

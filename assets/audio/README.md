@@ -1,14 +1,7 @@
-# Áudio opcional
+# Áudio original do Yawara
 
-O projeto funciona sem áudio. Se estes arquivos existirem, são carregados automaticamente:
+Trilhas originais sintetizadas para este projeto: `music_menu.ogg`, `music_regions.ogg`, `music_boss.ogg` (loop automático).
 
-- `music_menu.ogg`
-- `music_regions.ogg`
-- `music_boss.ogg`
-- `attack.wav`
-- `hurt.wav`
-- `dash.wav`
-- `levelup.wav`
-- `boss_roar.wav`
-- `victory.wav`
-- `defeat.wav`
+Efeitos também originais: `attack.wav`, `footstep.wav`, `dash.wav`, `hurt.wav`, `pickup.wav`, `levelup.wav`, `boss_roar.wav`, `victory.wav`, `defeat.wav`.
+
+O motor usa `AudioManager` e os canais `Music` e `SFX`. Configure-os no menu.
